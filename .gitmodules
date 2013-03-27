@@ -1,0 +1,3 @@
+[submodule "js/jquery-pjax"]
+	path = js/jquery-pjax
+	url = git://github.com/defunkt/jquery-pjax.git

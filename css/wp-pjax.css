@@ -1,0 +1,63 @@
+/* 
+    Document   : wp-pjax
+    Created on : 2013-feb-06, 23:49:12
+    Author     : Peter Elmered
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#wp-pjax-toggle-container {
+	position: fixed;
+	bottom: 5px;
+	right: 20px;
+	width: 200px;
+	z-index: 9999;
+    background: #eee;
+    opacity: 0.8;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+}
+#wp-pjax-toggle {
+    
+}
+
+
+
+/* NOTICE */
+.notice-wrap {
+	position: fixed;
+	bottom: 30px;
+	right: 20px;
+	width: 210px;
+	z-index: 9999;
+}
+
+* html .notice-wrap {
+	position: absolute;		
+}
+ 
+.notice-item {
+	min-height: 40px;
+	background: #333;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	color: #eee;
+	padding: 10px;
+	font-family: lucida Grande;
+	font-size: 11px;
+	border: 2px solid #999;
+	display: block;
+	position: relative;
+	margin: 0 0 12px 0;
+}
+
+.notice-item-close {
+	position: absolute;
+	font-family: Arial;
+	font-size: 12px;
+	font-weight: bold;
+	right: 6px;
+	top: 6px;
+	cursor: pointer;
+}

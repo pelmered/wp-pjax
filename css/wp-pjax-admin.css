@@ -1,0 +1,23 @@
+/* 
+    Document   : wp-pjax-admin
+    Created on : 2013-feb-08, 10:25:50
+    Author     : Peter Elmered
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+#wp-pjax-admin .postbox h3 {
+    padding: 7px 10px;
+    
+}
+#wp-pjax-admin legend {
+    
+    margin: 0 20px; 
+    font-size: 22px;
+    
+}
+
+#wp-pjax-admin #pjax-selectors input[type=text] {
+    width: 100%;
+}
