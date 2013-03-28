@@ -171,6 +171,11 @@ class WP_PJAX_WP_PJAX
             //$pg = wp_pjax_get_instance('PageCache');
             header('PJAX-loaded-resource: '.$pg->key );    
             
+            if(!isset($pg->status ))
+            {
+                $pg->status == 'MISS';
+            }
+            
             header( 'PJAX-Page-Cache: '.$pg->status );
             /*
             if( $pg->status == 'HIT' )
