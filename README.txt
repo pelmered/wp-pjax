@@ -57,7 +57,7 @@ A
 
 == Changelog ==
 
-= 0.0.1 =
+= 0.0.2 =
 First Alpha release
 * Hack to make sure this plugin runs first for even better perfomance on cache hits(No need to touch the other plugins if we have a cached page).
 
