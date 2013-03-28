@@ -9,6 +9,10 @@ Makes WordPress a lot faster using PJAX (PushState + AJAX) for loading content.
 
 == Description ==
 
+
+= THIS PLUGIN IS STILL EXRPIMENTAL - USE AT YOUR OWN RISK! =
+
+
 = WP-PJAX - PJAX for Wordpress Plugin. =
 Makes your site faster and saves you a lot of bandwidth and CPU power by making your Wordpress site PJAX powered!
 
