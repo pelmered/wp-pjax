@@ -151,8 +151,6 @@ class WP_PJAX_Config
                 echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved!</strong></p></div>';
             }
             
-            print_r($plugin_option_array);
-            
         }
         
         

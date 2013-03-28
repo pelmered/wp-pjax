@@ -1,9 +1,9 @@
 <?php
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Admin page
  */
+
 ?>
 <div id="wp-pjax-admin" class="wrap">
     <h2><?php _e('WP PJAX Settings'); ?></h2>
