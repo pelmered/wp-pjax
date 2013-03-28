@@ -1,10 +1,9 @@
 === Plugin Name ===
-Contributors: username1, username2 (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.3.1
-Tested up to: 3.3.1
-Stable tag: 4.3
+Contributors: pekz0r
+Tags: Performance, Cache, PJAX, Speed, Optimization
+Requires at least: 3.5
+Tested up to: 3.5.1
+Stable tag: 0.0.1
 
 Makes WordPress a lot faster using PJAX (PushState + AJAX) for loading content.
 
@@ -57,6 +56,10 @@ A
 2. Admin page.
 
 == Changelog ==
+
+= 0.0.1 =
+First Alpha release
+* Hack to make sure this plugin runs first for even better perfomance on cache hits(No need to touch the other plugins if we have a cached page).
 
 = 0.0.1 =
 First Alpha release
