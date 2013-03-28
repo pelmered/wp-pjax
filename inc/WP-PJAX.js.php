@@ -10,15 +10,15 @@ ini_set("display_errors", 1);
 
 
 
-if (empty($this->_config['pe-wp-pjax-menu-selector']) || empty($this->_config['pe-wp-pjax-content-selector']) )
+if (empty($this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector']) || empty($this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']) )
 {
     trigger_error('ERROR: WP-PJAX Not set up correctly. Not loading JS. '.__FILE__ . ' (' .__LINE__ . ')', E_USER_NOTICE );
     return '';
 }
 
-if( !empty( $this->_config['pe-wp-pjax-menu-active-class'] ) )
+if( !empty( $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'] ) )
 {
-    $active_classes = explode(' ',  $this->_config['pe-wp-pjax-menu-active-class']);
+    $active_classes = explode(' ',  $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']);
 
     $active_classes = '.'.implode(', .', $active_classes);
     //echo $active_classes;
@@ -43,22 +43,22 @@ var localtorage;
 
 (function($){
     
-    $(document).pjax('<?php echo $this->_config['pe-wp-pjax-menu-selector']; ?>',  '<?php echo $this->_config['pe-wp-pjax-content-selector']; ?>');//, {
-        //fragment: '<?php echo $this->_config['pe-wp-pjax-content-selector']; ?>',
+    $(document).pjax('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>',  '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>');//, {
+        //fragment: '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>',
         //timeout: 4000
     //))});
     /*
     if ($.support.pjax) {
-        $(document).on('click', '<?php echo $this->_config['pe-wp-pjax-menu-selector']; ?>', function(event) {
+        $(document).on('click', '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>', function(event) {
             //var container = $(this).closest('[data-pjax-container]')
-            $.pjax.click(event, {container: '<?php echo $this->_config['pe-wp-pjax-content-selector']; ?>'})
+            $.pjax.click(event, {container: '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>'})
         })
     }
     */
         
-<?php if(!empty($this->_config['pe-wp-pjax-load-timeout'])) : ?>
-    $.pjax.defaults.timeout = <?php echo $this->_config['pe-wp-pjax-load-timeout']; ?>;
-<?php elseif( $this->_config['pe-wp-pjax-load-timeout'] == '0' ) : ?> 
+<?php if(!empty($this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout'])) : ?>
+    $.pjax.defaults.timeout = <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout']; ?>;
+<?php elseif( $this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout'] == '0' ) : ?> 
     $.pjax.defaults.timeout = false;
 <?php endif; ?>
     
@@ -94,10 +94,10 @@ var localtorage;
         //console.log(url.pathname);
         
         //Remove old link active classes
-        $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>');
-        //$('a').parent().removeClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>');
+        $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+        //$('a').parent().removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
         //add link active classes
-        $("a[href$='"+url.pathname+"']").parent().addClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>');//.css('background-color','red');
+        $("a[href$='"+url.pathname+"']").parent().addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');//.css('background-color','red');
         
         
 		//return false;
@@ -120,14 +120,14 @@ var localtorage;
         */
 
 
-        <?php if(  $this->_config['pe-wp-pjax-show-extended-notice'] ) : ?>
+        <?php if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] ) : ?>
         var d = new Date();
         time = d.getTime()
         <?php endif; ?>
             
-        <?php if( $this->_config['pe-wp-pjax-content-fade'] ) : ?>
+        <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade'] ) : ?>
             
-            $('<?php echo $this->_config['pe-wp-pjax-content-selector']; ?>').animate({opacity: 0.1}, <?php echo $this->_config['pe-wp-pjax-content-fade-timeout-out']; ?>);
+            $('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>').animate({opacity: 0.1}, <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-out']; ?>);
                 
         <?php endif; ?>
     });
@@ -143,10 +143,10 @@ var localtorage;
         */
         //sessionStorage.setItem(settings.url, request.responseText)
 
-        <?php if( $this->_config['pe-wp-pjax-content-fade'] ) : ?>
+        <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade'] ) : ?>
             
-            $('<?php echo $this->_config['pe-wp-pjax-content-selector']; ?>').animate({opacity: 1}, <?php echo $this->_config['pe-wp-pjax-content-fade-timeout-in']; ?>);
-                //fadeIn(<?php echo $this->_config['pe-wp-pjax-content-fade-timeout-in']; ?>)
+            $('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>').animate({opacity: 1}, <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>);
+                //fadeIn(<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>)
             
         <?php endif; ?>
           /*
@@ -161,8 +161,8 @@ var localtorage;
        /*
             var page_id = request.getResponseHeader('PJAX-post-id');
             
-            $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>');
-            $('.page-item-'+page_id).addClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>'); //.parent().parent('li').addClass('<?php echo $this->_config['pe-wp-pjax-menu-active-class']; ?>');
+            $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+            $('.page-item-'+page_id).addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>'); //.parent().parent('li').addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
        */
        
             /*  
@@ -177,10 +177,10 @@ var localtorage;
              
             console.log(request.responseText);
         
-            <?php if( $this->_config['pe-wp-pjax-show-notice'] == 1 ) : ?>
+            <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1 ) : ?>
             
             var noticeText;
-            <?php if(  $this->_config['pe-wp-pjax-show-extended-notice'] ) : ?>
+            <?php if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] ) : ?>
             var cacheHit = request.getResponseHeader('PJAX-Page-Cache');
             var XCacheHit = request.getResponseHeader('X-Cache-Hit');
             var resource = request.getResponseHeader('PJAX-loaded-resource');
@@ -198,10 +198,10 @@ var localtorage;
                 
             $.noticeAdd({
                 text: noticeText,
-                <?php if( $this->_config['pe-wp-pjax-notice-sticky'] ) : ?>
+                <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'notice-sticky'] ) : ?>
                 stay: true
                 <?php else : ?>
-                stayTime: <?php echo $this->_config['pe-wp-pjax-notice-timeout']; ?>
+                stayTime: <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'notice-timeout']; ?>
                 <?php endif; ?>
             });
             
@@ -213,7 +213,7 @@ var localtorage;
     
     $(document).ready(function() {
 
-        <?php if( $this->_config['pe-wp-pjax-show-notice'] == 1 ) : ?>
+        <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1 ) : ?>
 
             
         if( !$.support.pjax ) {

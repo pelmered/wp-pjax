@@ -212,7 +212,7 @@ if(!function_exists( 'wp_pjax_header' ))
     
     function wp_pjax_header($wp, $pjax, $cacheHit)
     {
-        if(  $pjax->_config['pe-wp-pjax-show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
+        if(  $pjax->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
         {
             header('PJAX-loaded-resource: '.$pjax->page_cache['key']);
         }
