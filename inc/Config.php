@@ -45,8 +45,8 @@ class WP_PJAX_Config
     {
         return array(
             WP_PJAX_CONFIG_PREFIX.'menu-selector' => 'body a',
-            WP_PJAX_CONFIG_PREFIX.'content-selector]' => '#main',
-            WP_PJAX_CONFIG_PREFIX.'menu-active-class]' => 'current_page_item current_menu_item',
+            WP_PJAX_CONFIG_PREFIX.'content-selector' => '#main',
+            WP_PJAX_CONFIG_PREFIX.'menu-active-class' => 'current_page_item current_menu_item',
             WP_PJAX_CONFIG_PREFIX.'show-toggle' => 1,
             WP_PJAX_CONFIG_PREFIX.'load-timeout' => 4000, 
             WP_PJAX_CONFIG_PREFIX.'show-notice' => 1, 
@@ -124,6 +124,11 @@ class WP_PJAX_Config
             WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-out',
         );
         
+        
+        $wp_pjax_options = $this->get();
+        
+        
+        
         if( isset($_POST[WP_PJAX_CONFIG_PREFIX.'clear-cache']))
         {
             $page_cache = wp_pjax_get_instance('PageCache');
@@ -149,12 +154,23 @@ class WP_PJAX_Config
                 update_option( WP_PJAX_OPTIONS_KEY, $plugin_option_array ); 
 
                 echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Settings saved!</strong></p></div>';
+                
+                $wp_pjax_options = array_merge($wp_pjax_options, $plugin_option_array);
             }
             
         }
         
+        //Load default settings
+        if( isset($_POST[WP_PJAX_CONFIG_PREFIX.'load-default-settings']))
+        {
+            $wp_pjax_options = array_merge($wp_pjax_options, $this->get_defaults());
+            
+            update_option( WP_PJAX_OPTIONS_KEY, $wp_pjax_options ); 
+            
+            echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Deafault settings loaded!</strong></p></div>';
+        }
         
-        $wp_pjax_options = $this->get();
+        
         //print_r($wp_pjax_options);
         
         include WP_PJAX_PLUGIN_PATH.'views/configuration.php';
