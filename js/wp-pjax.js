@@ -3,9 +3,9 @@
     var menuLinkSelector = '.nav-menu a';
 
     $(document).ready(function() {
-        $(<?php echo $wp_pjax_options['pe-wp-pjax-menu-selector']; ?>).pjax('<?php echo $wp_pjax_options['pe-wp-pjax-content-selector']; ?>').live('click', function(e) {       
+        $(<?php echo $wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>).pjax('<?php echo $wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>').live('click', function(e) {       
             alert('asdasda');
-            $('<?php echo $wp_pjax_options['pe-wp-pjax-menu-active-class']; ?>')<?php foreach($active_class_array AS $ac ){ echo '.removeClass'; } ?>removeClass('');
+            $('<?php echo $wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>')<?php foreach($active_class_array AS $ac ){ echo '.removeClass'; } ?>removeClass('');
             $(this).parent().addClass('current-menu-item').parent().parent('li').addClass('current-menu-item');
         });
         
@@ -51,7 +51,7 @@
             console.log(request.readyState);
             console.log(request.responseText);
             
-            <?php if( $wp_pjax_options['pe-wp-pjax-show-notice'] == 1 ) : ?>
+            <?php if( $wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1 ) : ?>
             
             
             jQuery.noticeAdd(

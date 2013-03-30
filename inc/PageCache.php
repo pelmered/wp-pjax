@@ -38,7 +38,7 @@ class WP_PJAX_PageCache
             return FALSE;
         }
         
-        $exceptions = explode("\n", $this->_config['pe-wp-pjax-page-cache-exceptions']);
+        $exceptions = explode("\n", $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']);
         
         //print_r($exceptions);
         
@@ -63,7 +63,7 @@ class WP_PJAX_PageCache
         }
         
         
-//        $this->_config['pe-wp-pjax-page-cache-exceptions']
+//        $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
         
         
         
@@ -157,8 +157,8 @@ class WP_PJAX_PageCache
     
     function set($page_content)
     {
-        //phpconsole(array('SET_KEY' => $this->get_key(), 'lifetime' => $this->_config['pe-wp-pjax-page-cache-lifetime'] ), 'peter');
-        return set_transient( $this->get_key(), $page_content, $this->_config['pe-wp-pjax-page-cache-lifetime'] );
+        //phpconsole(array('SET_KEY' => $this->get_key(), 'lifetime' => $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] ), 'peter');
+        return set_transient( $this->get_key(), $page_content, $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] );
     }
     
     function clearCache()

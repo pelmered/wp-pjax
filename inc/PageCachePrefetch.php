@@ -92,7 +92,7 @@ class WP_PJAX_PageCachePrefetch
 
         if( !$urls)
         {
-            $sitemap_url = $this->_config['pe-wp-pjax-page-cache-prefetch-sitemap-url'];
+            $sitemap_url = $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-url'];
 
             $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
             

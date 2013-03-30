@@ -1,23 +1,36 @@
 <?php
 /**
 Plugin Name: WP-PJAX
-Plugin URI: http://wordpress.org/extend/plugins/---
+Plugin URI: http://wordpress.org/extend/plugins/wp-pjax/
 Description: Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content
-Version: 0.0.1
+Version: 0.0.3.2
 Author: Peter Elmered
 Author URI: http://elmered.com
 Text Domain: pe_wp_pjax
+License: http://www.gnu.org/licenses/gpl.html GNU General Public License
 */
-/**
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License
-*/
+/*
+  Copyright 2013 Peter Elmered (email: peter@elmered.com)
 
-//global $userdata;
-//echo $userdata->user_level;
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License, version 2, as 
+  published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 
 define('WP_DEBUG', true);
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 ini_set("display_errors", 1);
+
+
 
 
 
@@ -31,6 +44,21 @@ define('WP_PJAX_PLUGIN_URL', plugins_url().'/wp-pjax');
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 require_once(WP_PJAX_PLUGIN_PATH.'inc/define.php');
+
+/**
+ * Make sure this plugin is laoded first!
+ */
+add_action("activated_plugin", "load_this_plugin_first");
+function load_this_plugin_first() {
+	$active_plugins = get_option('active_plugins');
+	$this_plugin_key = array_search(WP_PJAX_PLUGIN_PATH, $active_plugins);
+	if ($this_plugin_key) { // if it's 0 it's the first plugin already, no need to continue
+		array_splice($active_plugins, $this_plugin_key, 1);
+		array_unshift($active_plugins, WP_PJAX_PLUGIN_PATH);
+		update_option('active_plugins', $active_plugins);
+	}
+}
+
 
 /**
  * Returns instance of singleton class
@@ -184,7 +212,7 @@ if(!function_exists( 'wp_pjax_header' ))
     
     function wp_pjax_header($wp, $pjax, $cacheHit)
     {
-        if(  $pjax->_config['pe-wp-pjax-show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
+        if(  $pjax->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
         {
             header('PJAX-loaded-resource: '.$pjax->page_cache['key']);
         }
