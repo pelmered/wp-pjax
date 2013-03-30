@@ -3,7 +3,7 @@ Contributors: pekz0r
 Tags: Performance, Cache, PJAX, Speed, Optimization
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 0.0.3.2
+Stable tag: 0.0.3.3
 
 Makes WordPress a lot faster using PJAX (PushState + AJAX) for loading content.
 
@@ -52,25 +52,25 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/wp
 
 In order for this to work you need to make some changes to your theme. This what you should do.
 
-1. In order for this to work you need to make some changes to your theme. This what you should do.
+In order for this to work you need to make some changes to your theme. This what you should do.
 
-1.1. **Header.** Put this line of code in the top of every header file(any header*.php file) in your theme(before any code or output)
+1. **Header.** Put this line of code in the top of every header file(any header*.php file) in your theme(before any code or output)
 
 `<?php if(function_exists( 'get_pjax_header' )) if(get_pjax_header()) return FALSE; ?>`
 
-1.2. **Footer.** Put this line of code in the top of every footer file(any footer*.php file) in your theme(before any code or output)
+2. **Footer.** Put this line of code in the top of every footer file(any footer*.php file) in your theme(before any code or output)
 
 `<?php if(function_exists( 'get_pjax_footer' )) if(get_pjax_footer()) return FALSE; ?>`
 
-1.3. Sidebar. Put this line of code in the top of every sidebar file(any sidebar*.php file) in your theme(before any code or output)
+3. Sidebar. Put this line of code in the top of every sidebar file(any sidebar*.php file) in your theme(before any code or output)
 
 `<?php if(function_exists( 'get_pjax_sidebar' )) if(get_pjax_sidebar()) return FALSE; ?>`
 
-2. Install and activate the plugin as usual
+4. Install and activate the plugin as usual
 
-3. Configure the plugin and enable it. The configuration page can be found under 'WP-PJAX' in the settings menu in WP-Admin. Basic instructions on how to configure is provided on the configuration page.
+5. Configure the plugin and enable it. The configuration page can be found under 'WP-PJAX' in the settings menu in WP-Admin. Basic instructions on how to configure is provided on the configuration page.
 
-4. That should be it! I Hope you will enjoy the plugin and the performance boost!
+6. That should be it! I Hope you will enjoy the plugin and the performance boost!
 
 == Frequently Asked Questions ==
 Your questions goes here. Feel free to contact me!
@@ -81,7 +81,7 @@ A
 
 == Screenshots ==
 
-1. The plugin is activated with the loading noticies to the right. Check out the load times!
+1. The plugin is activated with the loading notices to the right. Check out the load times!
 2. Admin page.
 
 == Changelog ==
