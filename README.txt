@@ -3,7 +3,7 @@ Contributors: pekz0r
 Tags: Performance, Cache, PJAX, Speed, Optimization
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 0.0.3.1
+Stable tag: 0.0.3.3
 
 Makes WordPress a lot faster using PJAX (PushState + AJAX) for loading content.
 
