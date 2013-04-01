@@ -75,7 +75,7 @@ class WP_PJAX_PageCachePrefetch
         $start_time = microtime(TRUE);
    
         
-        phpconsole(array('action'=> 'Initialize', 'start' => $start + $i ), 'peter');
+        //phpconsole(array('action'=> 'Initialize', 'start' => $start + $i ), 'peter');
                 
         
         set_time_limit(0);
@@ -159,7 +159,7 @@ class WP_PJAX_PageCachePrefetch
             {
                 wp_schedule_single_event(current_time('timestamp'), 'wp-pjax-pg-prefetch', array($start + $i ));
 
-                phpconsole(array('action'=> 'new request','queue' => $queue, 'urls' => $urls, 'start' => $start, 'i' => $i ), 'peter');
+                //phpconsole(array('action'=> 'new request','queue' => $queue, 'urls' => $urls, 'start' => $start, 'i' => $i ), 'peter');
                 
                 $msg .= 'execution timeout';
                 

@@ -3,11 +3,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+/*
 define('WP_DEBUG', true);
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 ini_set("display_errors", 1);
-
+*/
 
 
 if (empty($this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector']) || empty($this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']) )
@@ -21,15 +21,6 @@ if( !empty( $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'] ) )
     $active_classes = explode(' ',  $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']);
 
     $active_classes = '.'.implode(', .', $active_classes);
-    //echo $active_classes;
-    /*
-    $active_class_array = array();
-
-    foreach($active_classes AS $ac) 
-    {
-        $active_class_array[] = trim($ac, ',. ');
-    }
-    */
 }
 
 ?>
@@ -71,53 +62,33 @@ var localtorage;
     $(document).on('pjax:timeout', function(event) {
         // Prevent default timeout redirection behavior
         event.preventDefault();
-        alert('timeout');
+        //alert('timeout');
     });
     
-    $(document).on('pjax:beforeSend', function(event, request, settings) {
+    $(document).on('pjax:beforeSend', function(event, xhr, settings) {
         
-		//deleteAllCookies();
-		
-        console.log(event);
-        
-        //console.log(request );
-        //console.log(settings.url);
-        
-   
-        //Hack to get a location object from url string
-        url = document.createElement('a');
-        url.href = settings.url;
-        
-        var protocol = url.protocol;
-        var hash = url.hash;
-        
-        //console.log(url.pathname);
-        
-        //Remove old link active classes
-        $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
-        //$('a').parent().removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
-        //add link active classes
-        $("a[href$='"+url.pathname+"']").parent().addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');//.css('background-color','red');
-        
-        
-		//return false;
-    });
-
-    $(document).on('pjax:start', function(xhr) {
-    
         //Prevent double loading and load chaining
         if (xhr) 
         {
+            //console.log('xhr');
+            //console.log(xhr);
+            //alert('asdasd');
+            
             //xhr.abort();
+            //return true;
             //return false;
         }
-
-/*
-
-        localtorage =false;
         
-        localtorage = sessionStorage.getItem('yourkey');
-        */
+
+        //deleteAllCookies();
+
+        //Remove old link active classes
+        $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+        //$('a').parent().removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+    });
+
+    $(document).on('pjax:start', function(event, xhr, settings) {
+    
 
 
         <?php if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] ) : ?>
@@ -133,15 +104,16 @@ var localtorage;
     });
 
       $(document).on('pjax:end', function(event, request, settings) {
+          
+        //Hack to get a location object from url string
+        url = document.createElement('a');
+        url.href = settings.url;
         
-        console.log(event);
-        console.log(request);
-        console.log(settings);
-        
-        console.log(request.responseText);
-          /*
-        */
-        //sessionStorage.setItem(settings.url, request.responseText)
+        var protocol = url.protocol;
+        var hash = url.hash;
+          
+        //add link active classes
+        $("a[href$='"+url.pathname+"']").parent().addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');//.css('background-color','red');
 
         <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade'] ) : ?>
             
@@ -149,33 +121,6 @@ var localtorage;
                 //fadeIn(<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>)
             
         <?php endif; ?>
-          /*
-        console.log(event);
-            console.log(request);
-        
-            console.log(settings);
-        */
-		
-		
-		
-       /*
-            var page_id = request.getResponseHeader('PJAX-post-id');
-            
-            $('<?php echo $active_classes; ?>').removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
-            $('.page-item-'+page_id).addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>'); //.parent().parent('li').addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
-       */
-       
-            /*  
-        console.log(event);
-        console.log(request);
-        console.log(request.readyState);
-        console.log(request.responseText);
-        console.log(request);
-        */
-             //console.log(request.responseText);
-             //console.log(request);
-             
-            console.log(request.responseText);
         
             <?php if( $this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1 ) : ?>
             
@@ -221,7 +166,6 @@ var localtorage;
         }
         
         $('.notice-item').on('click', function() {
-            alert('asdasd');
             jQuery.noticeRemove($(this), 400);
         });
 
@@ -234,7 +178,6 @@ var localtorage;
             else
             {
                 $(document).pjax.disable();
-                alert('disable');
                 $('#wp-pjax-toggle-status').html('Disabled').css('color', 'red');
             }
             

@@ -160,16 +160,6 @@
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row">Show extended info in notice:</th>
-                        <td>
-                            <label for="<?php echo WP_PJAX_CONFIG_PREFIX; ?>show-extended-notice">
-                                <input name="<?php echo WP_PJAX_CONFIG_PREFIX; ?>show-extended-notice" id="<?php echo WP_PJAX_CONFIG_PREFIX; ?>show-extended-notice" value="1" type="checkbox"  <?php echo ($wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] == 1 ? 'CHECKED=CHECKED' : ''); ?> />
-                                <strong>Enable</strong>
-                            </label>
-                            <p class="description"><?php _e('Show XHR/AJAX load time, page cahce info etc in notice.'); ?></p>
-                        </td>
-                    </tr>
-                    <tr valign="top">
                         <th scope="row">Show notice for:</th>
                         <td>
                             Roles (not ready)
@@ -261,7 +251,7 @@
             </p>
         </div>
     </div>
-    <div id="pjax-page-cache" class="postbox ">
+    <div id="pjax-cache-prefetch" class="postbox ">
         <div class="handlediv" title="Click to toggle"><br></div>
             <h3>Prefetch cache</h3>
             <p>

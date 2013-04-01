@@ -35,9 +35,6 @@ class WP_PJAX_WP_PJAX
         $config = wp_pjax_get_instance('Config');
         $this->_config = $config->get();
         
-        register_activation_hook( __FILE__, array(&$this, 'activate_plugin') );
-        register_deactivation_hook( __FILE__, array(&$this, 'deactivate_plugin') );
-        
         $this->_config['debug_mode'] = TRUE;
         
         if( is_admin() )
@@ -77,12 +74,15 @@ class WP_PJAX_WP_PJAX
                 
                 //add_action('send_headers', array(&$this, 'send_headers'), 1, 999 );  
             }
+            else if($this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] == 1)
+            {
+                header( 'PJAX-Page-Cache: DISABLED');
+            }
             
         //phpconsole(array('action'=> 'Initialize', 'start' => $start + $i ), 'peter');
             //$this->send_headers($wp);
             //$this->pjax_render($wp);
             
-//            die('asdasd');
             //Include and render page template
             add_action('wp', array(&$this, 'pjax_render') );
             //add_action('template_redirect', array(&$this, 'pjax_render') );
@@ -113,6 +113,11 @@ class WP_PJAX_WP_PJAX
 
 
         
+    // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
+        register_activation_hook( __FILE__, array(&$this, 'activate_plugin') );
+        register_deactivation_hook( __FILE__, array(&$this, 'deactivate_plugin') );
+        register_uninstall_hook( __FILE__, array(&$this, 'uninstall_plugin' ) );
+        
     }
     
     
@@ -124,6 +129,10 @@ class WP_PJAX_WP_PJAX
     {
         
     }
+    function uninstall_plugin()
+    {
+        
+    }
     
 
     
@@ -131,12 +140,16 @@ class WP_PJAX_WP_PJAX
     
     function send_headers( $wp, $pg )
     {
-        phpconsole(array('config' => $this->_config), 'peter');
+        if(!$pg)
+        {
+            $pg = $this->page_cache;
+            //$pg = &wp_pjax_get_instance('PageCache');
+        }
         
         if( $pg->status !== 'SKIP')
         {
             //Attemt to cache the HTML in the browser cache
-            //Do not serve cached pages to prefetch
+            //But do not serve cached pages to prefetch
             if( !wp_pjax_check_request('HTTP_X_WP_PJAX_PREFETCH')  && $this->_config[WP_PJAX_CONFIG_PREFIX.'browser-page-cache'] == 1 )
             {
                 $seconds_to_cache = 650;
@@ -144,11 +157,10 @@ class WP_PJAX_WP_PJAX
                 header("Expires: $ts");
                 header("Pragma: cache");
                 header("Cache-Control: max-age=$seconds_to_cache");
-          
             }
+            
             //echo $_SERVER['HTTP_COOKIE'];
             // Unset cookies
-            
             if ( $this->_config[WP_PJAX_CONFIG_PREFIX.'strip-cookies'] == 1 && isset($_SERVER['HTTP_COOKIE'])) {
                 $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
                 foreach($cookies as $cookie) {
@@ -157,25 +169,19 @@ class WP_PJAX_WP_PJAX
                     setcookie($name, '', time()-1000);
                     setcookie($name, '', time()-1000, '/');
                 }
+                //header_remove('Cookie');
             }
         }
         
 
-        header_remove('Cookie');
-
-        if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] == 1 && current_user_can('edit_plugins') || $this->_config['debug_mode'] )
+        if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] == 1 && current_user_can('edit_plugins')) //|| $this->_config['debug_mode'] )
         {
-            //var_dump($this->page_cache['hit']);
-            //die('fakk2');
-            
-            //$pg = wp_pjax_get_instance('PageCache');
             header('PJAX-loaded-resource: '.$pg->key );    
             
             if(!isset($pg->status ))
             {
                 $pg->status == 'MISS';
             }
-            
             header( 'PJAX-Page-Cache: '.$pg->status );
             /*
             if( $pg->status == 'HIT' )
@@ -249,80 +255,10 @@ class WP_PJAX_WP_PJAX
             $this->page_cache->set($page_content);
             
             echo $page_content;
-            die('asdasdasdsadsad');
-            //echo 'set transient: ';
-            //echo $this->page_cache['key'];
-            //var_dump($s);
+            die();
         }
         
         return '';
-        
-        if (array_key_exists('HTTP_X_PJAX', $_SERVER) && $_SERVER['HTTP_X_PJAX'])
-        {
-            //$start_time = microtime(true);
-            $_pjax = TRUE;
-            
-            global $wp_query;
-            
-            $post = $wp_query->post;
-            $post_id = $wp_query->post->ID;
-            
-            do_action('wp_pjax_before_render', $post);
-
-            //Get page content from WP Object cache
-            
-            //$page_content = wp_cache_get( 'pjax_post_'.$post_id, 'pjax_page_cache' );
-            //$page_content = get_transient( 'pjax_post_'.$post_id );
-            $page_content = FALSE;
-            
-            do_action('wp_pjax_header', $wp_query->post, $this->_config);
-            
-            if ( $page_content === FALSE )  {
-                if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] && current_user_can('edit_plugins') || $this->_config['debug_mode'] )
-                {
-                    header('PJAX-Cache: MISS!');
-                }
-                
-                $theme_path = get_template_directory();
-
-                ob_start();
-            
-                // Load PJAX template conditionally based on post's template (as defined via Wordpress Administration)
-                $template_name = get_post_meta($post_id, '_wp_page_template', true);
-                //var_dump( $template_name );
-                
-                if( file_exists( $theme_path . DIRECTORY_SEPARATOR . $template_name ) )
-                {
-                    include($theme_path . DIRECTORY_SEPARATOR . $template_name);
-                }
-                else
-                {   //If template file not found, revert to the default /page.php template 
-                    include($theme_path . DIRECTORY_SEPARATOR . 'page.php');
-                }
-
-                $page_content = ob_get_clean();
-
-                
-                //wp_cache_set( 'pjax_post_'.$post_id, $page_content,  'pjax_page_cache', 300 );
-                set_transient( 'pjax_post_'.$post_id, $page_content, 300 );
-                
-            } else {
-
-                if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']  && current_user_can('edit_plugins') || $this->_config['debug_mode'] )
-                {
-                    header('PJAX-Cache: HIT!');
-                }
-                
-            }
-            
-            //Echp page content
-            echo $page_content;
-            
-            //Stop execution. We do not want to execure more code
-            //die();
-        }
-        else
-            $_pjax = FALSE;
     }
         
 
