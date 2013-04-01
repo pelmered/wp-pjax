@@ -3,7 +3,7 @@
 Plugin Name: WP-PJAX
 Plugin URI: http://wordpress.org/extend/plugins/wp-pjax/
 Description: Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content
-Version: 0.0.3.3
+Version: 0.0.4
 Author: Peter Elmered
 Author URI: http://elmered.com
 Text Domain: pe_wp_pjax
@@ -25,6 +25,9 @@ License: http://www.gnu.org/licenses/gpl.html GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+
+
 
 define('WP_DEBUG', true);
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );

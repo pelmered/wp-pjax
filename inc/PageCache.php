@@ -11,6 +11,9 @@
  * @author Peter Elmered
  */
 
+
+
+
 class WP_PJAX_PageCache
 {
     public $key;
@@ -76,7 +79,7 @@ class WP_PJAX_PageCache
         if( !apply_filters('wp_pjax_use_pg', $wp) )
         {
             $this->status = 'SKIP';  
-            phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
+            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
             return NULL;
         }
         
@@ -93,7 +96,7 @@ class WP_PJAX_PageCache
         if ( $page_content !== FALSE )  
         {  
             $this->status = 'HIT';
-            phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
+            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
             
             do_action('send_headers', $wp, $this);
             
@@ -105,7 +108,7 @@ class WP_PJAX_PageCache
         else
         {
             $this->status = 'MISS';  
-            phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
+            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
             //do_action('send_headers', $wp, $this);
             //do_action('wp_pjax_header', $wp, $this, $this->status );
             return FALSE;
@@ -122,8 +125,6 @@ class WP_PJAX_PageCache
         {
             $key = $this->key;
         }
-        
-        echo 'key:'.$key."\n";
         
         return $key;
     }
@@ -151,7 +152,7 @@ class WP_PJAX_PageCache
         }
         
         $this->key = $key;
-        //echo 'key:'.$key."\n";
+        
         return $key;
     }
     
