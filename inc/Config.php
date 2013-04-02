@@ -59,8 +59,8 @@ class WP_PJAX_Config
             WP_PJAX_CONFIG_PREFIX.'strip-cookies' => 0,
             WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch' => 0,
             WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-interval' => 300,
-            WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-pages-per-interval' => 100,
-            WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-url' => 'http://wptest.elmered.com/sitemap_index.xml',
+            WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-pages-per-interval' => 20,
+            //WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-url' => '',
             WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-refresh-interval' => 6000
         );
     }
