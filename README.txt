@@ -3,7 +3,7 @@ Contributors: pekz0r
 Tags: Performance, Cache, PJAX, Speed, Optimization
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 0.0.4
+Stable tag: 0.0.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,7 +40,7 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/wp
 
 
 = Planned features / To-Do =
-* Better handling of menu active classes. Will probably use regex for this.
+* Better handling of menu active classes. Will probably use regex for this. Support for marking parent pages active would be nice but I don't know any good ways to accomplish that.
 * Better control over exceptions for when to disable PJAX, when you use Page cache, and when and what cookies and sessions that should be striped. Regex support will be added.
 * Refresh cache on publish/update.
 * Separate loading of sidebars with separate cache.
@@ -91,20 +91,21 @@ Bar!
 
 == Changelog ==
 
+= 0.0.4.1=
+* Added screenshots to Assets folder.
+* Fixed bug with the sitemap URL in the default settings.
+
 = 0.0.4=
-Code  clean up. Some code removed and some debug code commented
-URL parsing fix for finding element to add active class
+* Code  clean up. Some code removed and some debug code commented.
+* URL parsing fix for finding element to add active class.
 
 = 0.0.3 =
-First Alpha release
 * Added default settings for easier first-time configurations (Not super sexy, but it works).
 
 = 0.0.2 =
-First Alpha release
 * Hack to make sure this plugin runs first for even better performance on cache hits(No need to touch the other plugins if we have a cached page).
 
 = 0.0.1 =
-First Alpha release
 * The first version!
 * This is still experimental and I can't give you any guarantees.
 
