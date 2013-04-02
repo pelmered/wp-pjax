@@ -3,7 +3,9 @@ Contributors: pekz0r
 Tags: Performance, Cache, PJAX, Speed, Optimization
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 0.0.4
+Stable tag: 0.0.4.1
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Makes WordPress a lot faster using PJAX (PushState + AJAX) for loading content.
 
@@ -29,14 +31,16 @@ It makes your site significantly faster in most cases and saves you both process
 * Configurable. No need to dig into the code. You will still need basic knowledge about HTML and how Wordpress works to make this plugin reach it's full potential.
 * Live notices with a report for every page load (Load time, page cache hit or miss, Reverse proxy/Varnish cache miss or hit etc - See screenshot). This is great for debugging and testing and is of course only visible for admins.
 * Only a few changes in your theme and you are ready to go. Should not take more than 5 minutes and requires only basic knowledge.
-* PJAX is not supported in Internet Explorer 9 and earlier(IE 10+ supports this), but the plugin handles this gracefully by falling back on regular page loads for unsupported browsers. [Details on browser support](http://caniuse.com/#search=pushstate "Details on browser support")
+
+= Browser support =
+PJAX is not supported in Internet Explorer 9 and earlier(IE 10+ supports this), but the plugin handles this gracefully by falling back on regular page loads for unsupported browsers. [Details on browser support](http://caniuse.com/#search=pushstate "Details on browser support")
 
 = Development =
 All development of this plugin occurs on [GitHub](https://github.com/pelmered/wp-pjax "WP-PJAX on GitHub"). Please help me develop this by forking and sending pull requests.
 
 
 = Planned features / To-Do =
-* Better handling of menu active classes. Will probably use regex for this.
+* Better handling of menu active classes. Will probably use regex for this. Support for marking parent pages active would be nice but I don't know any good ways to accomplish that.
 * Better control over exceptions for when to disable PJAX, when you use Page cache, and when and what cookies and sessions that should be striped. Regex support will be added.
 * Refresh cache on publish/update.
 * Separate loading of sidebars with separate cache.
@@ -44,7 +48,7 @@ All development of this plugin occurs on [GitHub](https://github.com/pelmered/wp
 * Page cache prefetch needs to be revisited. WP-Cron is a bit tricky and its hard to handle timeouts gracefully and reliably cross different environments. 
 * Remove all debug code and general code cleanup. This will be finished before the 0.1 release.
 * Add an optional menu to the admin bar for clearing cache(all and current page).
-* Optimize execution flow for performance
+* Optimize execution flow for better performance
 * Maybe: Better way to generate the configurable javascript. I think of two options for this, ether use `wp_localize_script` to inject variables into javascript or to generate a javascript with PHP file when settings are saved.
 
 = Known issues =
@@ -87,17 +91,21 @@ Bar!
 
 == Changelog ==
 
+= 0.0.4.1=
+* Added screenshots to Assets folder.
+* Fixed bug with the sitemap URL in the default settings.
+
+= 0.0.4=
+* Code  clean up. Some code removed and some debug code commented.
+* URL parsing fix for finding element to add active class.
 
 = 0.0.3 =
-First Alpha release
 * Added default settings for easier first-time configurations (Not super sexy, but it works).
 
 = 0.0.2 =
-First Alpha release
 * Hack to make sure this plugin runs first for even better performance on cache hits(No need to touch the other plugins if we have a cached page).
 
 = 0.0.1 =
-First Alpha release
 * The first version!
 * This is still experimental and I can't give you any guarantees.
 
