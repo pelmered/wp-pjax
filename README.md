@@ -35,7 +35,7 @@ It makes your site significantly faster and saves you both processing power and 
 The goal is to make the plugin compatible with any theme with the minor modifications found under Setting up above. If you run into problems, please contact me and I will look info you problem to find a solution. The plguin is thoroughly tested on the TwentyTwelve theme and a few custom themes. 
 This plugins is tested to run on PHP 5.2+ and WordPress 3.5+ but will probably run on older versions as well. Please report if your testing! 
 
-## Actions & fitlers
+## Actions & filters
 All actions in order of typical execution: 
 
 wp_pjax_before_render - Triggered in the begining of get_pjax_header. Only runs on non-cached requests(the built in page cache).
