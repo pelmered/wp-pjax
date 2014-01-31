@@ -10,7 +10,7 @@
 
 require_once 'Util.php';
 
-define('WP_DEBUG', true);
+//define('WP_DEBUG', true);
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 ini_set("display_errors", 1);
 
@@ -22,8 +22,12 @@ class WP_PJAX_WP_PJAX
     var $_config = array();
     var $plugin_url;
     var $plugin_path;
-    var $page_cache = '';
+    var $page_cache;
     
+    public function __construct()
+    { 
+       $this->page_cache = new stdClass();
+    }
     
     function run()
     {
@@ -43,7 +47,10 @@ class WP_PJAX_WP_PJAX
             add_action('admin_menu', array(&$config, 'admin_pages') );
             
             //Configuration page styles
-            wp_enqueue_style( 'wp-pjax-admin', $this->plugin_url . '/css/wp-pjax-admin.css' );
+
+            add_action( 'wp_enqueue_scripts', function(){
+                wp_enqueue_style( 'wp-pjax-admin', $this->plugin_url . '/css/wp-pjax-admin.css' ) ;  
+            }); 
         }
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'enable'] != 1 )
@@ -105,7 +112,7 @@ class WP_PJAX_WP_PJAX
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch'] == 1)// && $_SERVER['REQUEST_URI'] == '/' )
         {
-            $this->page_cache = &wp_pjax_get_instance('PageCachePrefetch');
+            $this->page_cache = &wp_pjax_get_instance('PageCachePrefetch'); //&
             $this->page_cache->init( $this->_config );
 
             //add_action('send_headers', array(&$this, 'send_headers'), 1, 999 );  
@@ -114,9 +121,9 @@ class WP_PJAX_WP_PJAX
 
         
     // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-        register_activation_hook( __FILE__, array(&$this, 'activate_plugin') );
-        register_deactivation_hook( __FILE__, array(&$this, 'deactivate_plugin') );
-        register_uninstall_hook( __FILE__, array(&$this, 'uninstall_plugin' ) );
+       // register_activation_hook( __FILE__, array(&$this, 'activate_plugin') );
+       // register_deactivation_hook( __FILE__, array(&$this, 'deactivate_plugin') );
+       // register_uninstall_hook( __FILE__, array(&$this, 'uninstall_plugin' ) );
         
     }
     
@@ -201,23 +208,22 @@ class WP_PJAX_WP_PJAX
     //PJAX
     function pjax_load()
     {
-        wp_enqueue_script('wp-pjax', $this->plugin_url . '/js/jquery-pjax/jquery.pjax.js', array('jquery'));
-        //wp_enqueue_script('theme-pjax', $this->plugin_url . '/js/wp-pjax.js', array('jquery', 'pjax'));
-        //wp_enqueue_script('theme-pjax', $this->plugin_url . '/wp-pjax.js.php', array('jquery', 'pjax'));
+        add_action( 'wp_enqueue_scripts', function() { wp_enqueue_script('wp-pjax', $this->plugin_url . '/js/jquery-pjax/jquery.pjax.js', array('jquery')); } );
+        add_action( 'wp_enqueue_scripts', function() { wp_enqueue_script('theme-pjax', $this->plugin_url . '/js/wp-pjax.js', array('jquery', 'pjax')); }     );
+        add_action( 'wp_enqueue_scripts', function() { wp_enqueue_script('theme-pjax', $this->plugin_url . '/wp-pjax.js.php', array('jquery', 'pjax')); }    );
         
         add_action( 'wp_head', array(&$this, 'generate_js') );
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1  && current_user_can('edit_plugins')|| $this->_config['debug_mode'] )
         {
-            wp_enqueue_script('jquery-notice', $this->plugin_url . '/js/jquery.notice.js', array('jquery'));
-            
-            wp_enqueue_style( 'wp-pjax', $this->plugin_url . '/css/wp-pjax.css' );
+               add_action( 'wp_enqueue_scripts',function() { wp_enqueue_script('jquery-notice', $this->plugin_url . '/js/jquery.notice.js', array('jquery'));} );
+               add_action( 'wp_enqueue_scripts',function() { wp_enqueue_style( 'wp-pjax', $this->plugin_url . '/css/wp-pjax.css' );});
         }
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'show-toggle'] == 1 && current_user_can('edit_plugins') || $this->_config['debug_mode'] )
         {
-            wp_enqueue_style( 'wp-pjax', $this->plugin_url . '/css/wp-pjax.css' );
-            
+              add_action( 'wp_enqueue_scripts',function() { wp_enqueue_style( 'wp-pjax', $this->plugin_url . '/css/wp-pjax.css' );});
+
             add_action('wp_footer', array(&$this, 'add_toggle_html') );
         }
     }
@@ -236,14 +242,15 @@ class WP_PJAX_WP_PJAX
 
     function pjax_render( $wp )
     {
-        $this->page_cache = &wp_pjax_get_instance('PageCache');
+        $this->page_cache = new stdClass();
+        $this->page_cache = wp_pjax_get_instance('PageCache');
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache'] == 1 )
         {
             ob_start();  
         }
 
-        //Include the original WP tamplate loader. This will output the right page template/content
+        //Include the original WP template loader. This will output the right page template/content
         include ABSPATH . WPINC.DIRECTORY_SEPARATOR.'template-loader.php';        
 
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache'] == 1 )

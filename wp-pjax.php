@@ -29,9 +29,9 @@ License: http://www.gnu.org/licenses/gpl.html GNU General Public License
 
 
 
-define('WP_DEBUG', true);
-error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-ini_set("display_errors", 1);
+//define('WP_DEBUG', true);
+//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
+//ini_set("display_errors", 1);
 
 
 
