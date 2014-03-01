@@ -46,7 +46,7 @@ class WP_PJAX_Config
         return array(
             WP_PJAX_CONFIG_PREFIX.'menu-selector' => 'body a',
             WP_PJAX_CONFIG_PREFIX.'content-selector' => '#main',
-            WP_PJAX_CONFIG_PREFIX.'menu-active-class' => 'current-page-item current-menu-item',
+            WP_PJAX_CONFIG_PREFIX.'menu-active-class' => 'current_page_item current_menu_item',
             WP_PJAX_CONFIG_PREFIX.'show-toggle' => 1,
             WP_PJAX_CONFIG_PREFIX.'load-timeout' => 4000, 
             WP_PJAX_CONFIG_PREFIX.'show-notice' => 1, 
@@ -167,7 +167,7 @@ class WP_PJAX_Config
             
             update_option( WP_PJAX_OPTIONS_KEY, $wp_pjax_options ); 
             
-            echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Default settings loaded!</strong></p></div>';
+            echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Deafault settings loaded!</strong></p></div>';
         }
         
         
