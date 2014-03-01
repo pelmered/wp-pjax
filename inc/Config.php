@@ -167,7 +167,7 @@ class WP_PJAX_Config
             
             update_option( WP_PJAX_OPTIONS_KEY, $wp_pjax_options ); 
             
-            echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Deafault settings loaded!</strong></p></div>';
+            echo '<div id="setting-error-settings_updated" class="updated settings-error"><p><strong>Default settings loaded!</strong></p></div>';
         }
         
         
