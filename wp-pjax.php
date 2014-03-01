@@ -34,6 +34,7 @@ define('WP_PJAX_PLUGIN_URL', plugins_url().'/wp-pjax');
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
 require_once(WP_PJAX_PLUGIN_PATH.'inc/define.php');
+require_once(WP_PJAX_PLUGIN_PATH.'views/settingsmenu.php');
 
 /**
  * Make sure this plugin is loaded first!
