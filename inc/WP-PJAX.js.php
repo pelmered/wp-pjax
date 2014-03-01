@@ -58,12 +58,6 @@ var localtorage;
       // Prevent default timeout redirection behavior
       event.preventDefault()
     })
-   
-    $(document).on('pjax:timeout', function(event) {
-        // Prevent default timeout redirection behavior
-        event.preventDefault();
-        //alert('timeout');
-    });
     
     $(document).on('pjax:beforeSend', function(event, xhr, settings) {
         
