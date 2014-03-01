@@ -78,25 +78,17 @@ class WP_PJAX_PageCache
         
         if( !apply_filters('wp_pjax_use_pg', $wp) )
         {
-            $this->status = 'SKIP';  
-            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
+            $this->status = 'SKIP';
             return NULL;
         }
         
-        
-        //phpconsole(array('get key' => $this->get_key()  ), 'peter');
-        
         $page_content = get_transient( $this->get_key() );
-        
-        
-        //phpconsole(array('page content' => $page_content ), 'peter');
         
         //var_dump($page_content); 
         
         if ( $page_content !== FALSE )  
         {  
             $this->status = 'HIT';
-            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
             
             do_action('send_headers', $wp, $this);
             
@@ -107,8 +99,7 @@ class WP_PJAX_PageCache
         }
         else
         {
-            $this->status = 'MISS';  
-            //phpconsole(array('STATUS' => $this->status,'QUERY VARS' => $wp->query_vars,'SERVER'=> $_SERVER), 'peter');
+            $this->status = 'MISS';
             //do_action('send_headers', $wp, $this);
             //do_action('wp_pjax_header', $wp, $this, $this->status );
             return FALSE;
@@ -158,7 +149,6 @@ class WP_PJAX_PageCache
     
     function set($page_content)
     {
-        //phpconsole(array('SET_KEY' => $this->get_key(), 'lifetime' => $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] ), 'peter');
         return set_transient( $this->get_key(), $page_content, $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] );
     }
     

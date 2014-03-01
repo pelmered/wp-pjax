@@ -26,22 +26,9 @@ License: http://www.gnu.org/licenses/gpl.html GNU General Public License
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
-
-
 //define('WP_DEBUG', true);
 //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
 //ini_set("display_errors", 1);
-
-
-
-
-
-if(!class_exists('Phpconsole'))
-    require_once('libs/phpconsole/install.php');
-
-//phpconsole('Hello world', 'peter');
-
 
 define('WP_PJAX_PLUGIN_URL', plugins_url().'/wp-pjax');
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
@@ -49,7 +36,7 @@ define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 require_once(WP_PJAX_PLUGIN_PATH.'inc/define.php');
 
 /**
- * Make sure this plugin is laoded first!
+ * Make sure this plugin is loaded first!
  */
 add_action("activated_plugin", "load_this_plugin_first");
 function load_this_plugin_first() {
