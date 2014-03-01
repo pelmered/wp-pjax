@@ -86,7 +86,6 @@ class WP_PJAX_WP_PJAX
                 header( 'PJAX-Page-Cache: DISABLED');
             }
             
-        //phpconsole(array('action'=> 'Initialize', 'start' => $start + $i ), 'peter');
             //$this->send_headers($wp);
             //$this->pjax_render($wp);
             
