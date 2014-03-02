@@ -11,8 +11,8 @@
 require_once 'Util.php';
 
 //define('WP_DEBUG', true);
-error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-ini_set("display_errors", 1);
+//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
+//ini_set("display_errors", 1);
 
 
 class WP_PJAX_WP_PJAX
@@ -39,7 +39,7 @@ class WP_PJAX_WP_PJAX
         $config = wp_pjax_get_instance('Config');
         $this->_config = $config->get();
         
-        $this->_config['debug_mode'] = TRUE;
+        //$this->_config['debug_mode'] = TRUE;
         
         if( is_admin() )
         {
@@ -53,7 +53,7 @@ class WP_PJAX_WP_PJAX
             }); 
         }
         
-        if( $this->_config[WP_PJAX_CONFIG_PREFIX.'enable'] != 1 )
+        if( $this->_config[WP_PJAX_CONFIG_PREFIX.'enable'] !== 'checked' )
         {
             return;
         }

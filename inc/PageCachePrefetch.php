@@ -66,8 +66,8 @@ class WP_PJAX_PageCachePrefetch
         $log = wp_pjax_get_instance('Log');
         $log->setFile('prefetch');
         
-        define('WP_DEBUG', true);
-        error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
+        //define('WP_DEBUG', true);
+        //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
         ini_set("display_errors", 1);
    
         

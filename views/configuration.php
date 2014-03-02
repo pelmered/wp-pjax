@@ -31,7 +31,7 @@
                         <th scope="row">Enable plugin:</th>
                         <td>
                             <label for="<?php echo WP_PJAX_CONFIG_PREFIX; ?>enable">
-                                <input name="<?php echo WP_PJAX_CONFIG_PREFIX; ?>enable" id="<?php echo WP_PJAX_CONFIG_PREFIX; ?>enable" value="1" type="checkbox" <?php echo ($wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'enable'] == 1 ? 'CHECKED=CHECKED' : ''); ?> />
+                                <input name="<?php echo WP_PJAX_CONFIG_PREFIX; ?>enable" id="<?php echo WP_PJAX_CONFIG_PREFIX; ?>enable" value="checked" type="checkbox" <?php echo ($wp_pjax_options[WP_PJAX_CONFIG_PREFIX.'enable'] === 'checked' ? 'CHECKED=CHECKED' : ''); ?> />
                                 <strong>Enable</strong>
                             </label>
                             <p class="description"><?php _e('Enable plugin features acording to these settings or disable all functionality for the plugin.'); ?></p>
