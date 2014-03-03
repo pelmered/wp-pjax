@@ -82,7 +82,10 @@ var localtorage;
     });
 
     $(document).on('pjax:start', function(event, xhr, settings) {
-    
+		<?php
+		if($this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler'])
+			print $this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler'];
+		?>
 
 
         <?php if(  $this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] ) : ?>
@@ -98,6 +101,11 @@ var localtorage;
     });
 
       $(document).on('pjax:end', function(event, request, settings) {
+	    
+		<?php
+		if($this->_config[WP_PJAX_CONFIG_PREFIX.'post-handler'])
+			print $this->_config[WP_PJAX_CONFIG_PREFIX.'post-handler'];
+		?>
           
         //Hack to get a location object from url string
         url = document.createElement('a');

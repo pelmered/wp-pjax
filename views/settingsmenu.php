@@ -9,151 +9,178 @@ if (is_admin()) {
 
 class WPPjaxSettingsPage
 {
-    /*
-     * Holds the values to be used in the fields callbacks
-     */
-    private $options;
+	/*
+	 * Holds the values to be used in the fields callbacks
+	 */
+	private $options;
 	private $wp_pjax_options;
 
-    /*
-     * Start up
-     */
-    public function __construct()
-    {
-        add_action('admin_menu', [$this, 'add_plugin_page']);
-        add_action('admin_init', [$this, 'page_init']);
-    }
+	/*
+	 * Start up
+	 */
+	public function __construct()
+	{
+		add_action('admin_menu', [$this, 'add_plugin_page']);
+		add_action('admin_init', [$this, 'page_init']);
+	}
 
-    /*
-     * Add options page
-     */
-    public function add_plugin_page()
-    {
-        // This page will be under "Settings"
-        add_options_page(
-            'WP-PJAX Settings', 
-            'WP-PJAX (test-GL)', 
-            'manage_options', 
-            'wp-pjax-settings', 
-            [$this, 'create_admin_page'] //function() { $this->create_admin_page(); }
-        );
-    }
+	/*
+	 * Add options page
+	 */
+	public function add_plugin_page()
+	{
+		// This page will be under "Settings"
+		add_options_page(
+			'WP-PJAX Settings', 
+			'WP-PJAX (test-GL)', 
+			'manage_options', 
+			'wp-pjax-settings', 
+			[$this, 'create_admin_page'] //function() { $this->create_admin_page(); }
+		);
+	}
 
-    /*
-     * Options page callback
-     */
-    public function create_admin_page()
-    {
-        // Set class property
-        $this->options = get_option('my_option_name');
+	/*
+	 * Options page callback
+	 */
+	public function create_admin_page()
+	{
+		// Set class property
+		$this->options = get_option('my_option_name');
 		$this->wp_pjax_options = get_option(WP_PJAX_OPTIONS_KEY);
 		
 		var_dump($this->options);
 		var_dump($this->wp_pjax_options);
-        ?>
-        <div class="wrap">
-            <h2>WP-PJAX Settings (being tested in GadgetLife)</h2>           
-            <form method="post" action="options.php">
-            <?php
-                // This prints out all hidden setting fields
+		?>
+		<div class="wrap">
+			<h2>WP-PJAX Settings (being tested in GadgetLife)</h2>		   
+			<form method="post" action="options.php">
+			<?php
+				// This prints out all hidden setting fields
 				settings_fields('wp_pjax_option_group');
-				do_settings_sections('wp-pjax-setting');
-                do_settings_sections('my-setting-admin');
-                submit_button(); 
-            ?>
-            </form>
-        </div>
-        <?php
-    }
+				do_settings_sections('wp-pjax-selectors');
+				do_settings_sections('wp-pjax-handlers');
+				submit_button(); 
+			?>
+			</form>
+		</div>
+		<?php
+	}
 
-    /*
-     * Register and add settings
-     */
-    public function page_init()
-    {
+	/*
+	 * Register and add settings
+	 */
+	public function page_init()
+	{
 		register_setting(
 			'wp_pjax_option_group', // Option group
-			WP_PJAX_OPTIONS_KEY // Option name
+			WP_PJAX_OPTIONS_KEY, // Option name
+			[$this, 'sanitize']
 		);
 		
 		add_settings_section(
-            'wp_pjax_setting', // ID
-            'WP-PJAX Settings', // Title
-            [$this, 'print_section_info'], // Callback
-            'wp-pjax-setting' // Page
-        );
+			'wp_pjax_selectors', // ID
+			'Selectors', // Title
+			function() { print 'Enter the selectors for jquery-pjax to work on your own theme.'; }, // Callback
+			'wp-pjax-selectors' // Section page slug
+		);
 		
 		$this->add_settings_input_field(
-            WP_PJAX_CONFIG_PREFIX.'enable', // ID
-            'Enable', // Title
-            'wp-pjax-setting', // Page
-            'wp_pjax_setting', // Section
+			WP_PJAX_CONFIG_PREFIX.'enable', // ID
+			'Enable', // Title
+			'wp-pjax-selectors', // Section page slug
+			'wp_pjax_selectors', // Section ID
 			[ 'type' => 'checkbox', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
-        );
+		);
 		
 		$this->add_settings_input_field(
-            WP_PJAX_CONFIG_PREFIX.'menu-selector', // ID
-            'Menu selector', // Title
-            'wp-pjax-setting', // Page
-            'wp_pjax_setting', // Section
+			WP_PJAX_CONFIG_PREFIX.'menu-selector',
+			'Menu selector',
+			'wp-pjax-selectors',
+			'wp_pjax_selectors',
 			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
-        ); 
+		);
 		
-		$option_name = 'my_option_name';
-        register_setting(
-            'wp_pjax_option_group', // Option group
-            $option_name, // Option name
-            [$this, 'sanitize'] // Sanitize
-        );
-
-        add_settings_section(
-            'setting_section_id', // ID
-            'My Custom Settings', // Title
-            [$this, 'print_section_info'], // Callback
-            'my-setting-admin' // Page
-        );
-
-        $this->add_settings_input_field(
-            'id_number', // ID
-            'ID Number', // Title
-            'my-setting-admin', // Page
-            'setting_section_id', // Section
-			[ 'type' => 'number', 'option_name' => $option_name, 'option_array' => &$this->options ]
-        );
-
 		$this->add_settings_input_field(
-            'title', // ID
-            'Title', // Title
-            'my-setting-admin', // Page
-            'setting_section_id', // Section
-			[ 'type' => 'text', 'option_name' => $option_name, 'option_array' => &$this->options ]
-        ); 
-    }
+			WP_PJAX_CONFIG_PREFIX.'content-selector',
+			'Content selector',
+			'wp-pjax-selectors',
+			'wp_pjax_selectors',
+			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+		);
+		
+		$this->add_settings_input_field(
+			WP_PJAX_CONFIG_PREFIX.'menu-active-class',
+			'Menu active class',
+			'wp-pjax-selectors',
+			'wp_pjax_selectors',
+			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+		);
+		
+		add_settings_section(
+			'wp_pjax_handlers',
+			'JavaScript Handlers',
+			function() { print 'Enter JavaScript handlers if you have to manage your contents before or after page load.'; },
+			'wp-pjax-handlers'
+		);
+		
+		$this->add_settings_input_field(
+			WP_PJAX_CONFIG_PREFIX.'pre-handler',
+			'Handler working before page load',
+			'wp-pjax-handlers',
+			'wp_pjax_handlers',
+			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+		);
+		
+		$this->add_settings_input_field(
+			WP_PJAX_CONFIG_PREFIX.'post-handler',
+			'Handler working after page load',
+			'wp-pjax-handlers',
+			'wp_pjax_handlers',
+			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+		);
+	}
 
-    /*
-     * Sanitize each setting field as needed
-     *
-     * @param array $input Contains all settings fields as array keys
-     */
-    public function sanitize($input)
-    {
-        $new_input = array();
-        if (isset($input['id_number']))
-            $new_input['id_number'] = absint($input['id_number']);
+	/*
+	 * Sanitize each setting field as needed
+	 *
+	 * @param array $input Contains all settings fields as array keys
+	 */
+	public function sanitize($input)
+	{
+		$output = array();
+		
+		$this->sanitizeCheckbox($output, $input, WP_PJAX_CONFIG_PREFIX.'enable');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu-selector');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'content-selector');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu-active-class');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'pre-handler');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'post-handler');
 
-        if (isset($input['title']))
-            $new_input['title'] = sanitize_text_field($input['title']);
-
-        return $new_input;
-    }
+		return $output;
+	}
+	
+	private function sanitizeCheckbox(&$output, $input, $id) {
+		if (isset($input[$id]) && $input[$id] === 'checked')
+			$output[$id] = 'checked';
+	}
+	
+	private function sanitizeAbsint(&$output, $input, $id) {
+		if (isset($input[$id]) && $input[$id])
+			$output[$id] = absint($input[$id]);
+	}
+	
+	private function sanitizeText(&$output, $input, $id) {
+		if (isset($input[$id]) && !empty($input[$id]))
+			$output[$id] = sanitize_text_field($input[$id]);
+	}
 	
 	/*
-     * Print the Section text
-     */
-    public function print_section_info()
-    {
-        print 'Enter your settings below:';
-    }
+	 * Print the Section text
+	 */
+	public function print_section_info()
+	{
+		print 'Enter your settings below:';
+	}
 	
 	/*
 	 * Get the settings option array and print one of its values
@@ -164,7 +191,7 @@ class WPPjaxSettingsPage
 			$title, // Title 
 			[$this, 'add_input_callback'], // Callback
 			$page, // Page
-			$section_id, // Section           
+			$section_id, // Section		   
 			array_merge([ 'id' => $id ], $args)
 		);
 	}
@@ -202,4 +229,4 @@ class WPPjaxSettingsPage
 }
 
 if (is_admin())
-    $wp_pjax_settings_page = new WPPjaxSettingsPage();
+	$wp_pjax_settings_page = new WPPjaxSettingsPage();

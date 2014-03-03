@@ -68,7 +68,7 @@ class WP_PJAX_PageCachePrefetch
         
         //define('WP_DEBUG', true);
         //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-        ini_set("display_errors", 1);
+        //ini_set("display_errors", 1);
    
         
         
