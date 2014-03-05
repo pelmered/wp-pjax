@@ -82,6 +82,7 @@ var localtorage;
     });
 
     $(document).on('pjax:start', function(event, xhr, settings) {
+		Array.prototype.map.call(document.querySelector('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>').querySelectorAll("iframe"), function(iframe) { iframe.src = "about:blank"; }); 
 		<?php
 		if($this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler'])
 			print $this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler'];
