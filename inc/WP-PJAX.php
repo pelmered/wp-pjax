@@ -44,7 +44,7 @@ class WP_PJAX_WP_PJAX
         if( is_admin() )
         {
             //Add admin settings menu item
-            add_action('admin_menu', array(&$config, 'admin_pages') );
+            // add_action('admin_menu', array(&$config, 'admin_pages') );
             
             //Configuration page styles
 

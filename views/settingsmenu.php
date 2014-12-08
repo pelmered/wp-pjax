@@ -32,7 +32,7 @@ class WPPjaxSettingsPage
 		// This page will be under "Settings"
 		add_options_page(
 			'WP-PJAX Settings', 
-			'WP-PJAX (test-GL)', 
+			'WP-PJAX', 
 			'manage_options', 
 			'wp-pjax-settings', 
 			[$this, 'create_admin_page'] //function() { $this->create_admin_page(); }
@@ -52,7 +52,7 @@ class WPPjaxSettingsPage
 		var_dump($this->wp_pjax_options);
 		?>
 		<div class="wrap">
-			<h2>WP-PJAX Settings (being tested in GadgetLife)</h2>		   
+			<h2>WP-PJAX Settings</h2>		   
 			<form method="post" action="options.php">
 			<?php
 				// This prints out all hidden setting fields
