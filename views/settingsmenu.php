@@ -57,6 +57,7 @@ class WPPjaxSettingsPage
 			<?php
 				// This prints out all hidden setting fields
 				settings_fields('wp_pjax_option_group');
+				do_settings_sections('installation-instructions');
 				do_settings_sections('wp-pjax-selectors');
 				do_settings_sections('wp-pjax-handlers');
 				submit_button(); 
@@ -75,6 +76,13 @@ class WPPjaxSettingsPage
 			'wp_pjax_option_group', // Option group
 			WP_PJAX_OPTIONS_KEY, // Option name
 			[$this, 'sanitize']
+		);
+
+		add_settings_section(
+			'installation_instructions', // ID
+			'Installation', // Title
+			function() { print 'The plugin needs to control whether the header and footer should fire or not for every request. Therefore you need to make some small changes in your theme for this plugin to work properly. This is what you need to do: <p> 1. Header. Put this line of code in the top of every header file (any header*.php file) in your theme (before any code or output) <br><code>&#60;&#63;php if&#40;function&#95;exists&#40; &#39;get&#95;pjax&#95;header&#39; &#41;&#41; if&#40;get&#95;pjax&#95;header&#40;&#41;&#41; return FALSE&#59; &#63;&#62;</code> <p>2. Footer. Put this line of code in the top of every footer file (any footer*.php file) in your theme (before any code or output) <br><code>&#60;&#63;php if&#40;function&#95;exists&#40; &#39;get&#95;pjax&#95;footer&#39; &#41;&#41; if&#40;get&#95;pjax&#95;footer&#40;&#41;&#41; return FALSE&#59; &#63;&#62;</code> <p> 3. Sidebar. Put this line of code in the top of every sidebar file (any sidebar*.php file) in your theme (before any code or output). This is currently not used, but it will probably be used in later versions. So for safe upgrades in the future, I recommend that you do this.) <br><code>&#60;&#63;php if&#40;function&#95;exists&#40; &#39;get&#95;pjax&#95;sidebar&#39; &#41;&#41; if&#40;get&#95;pjax&#95;sidebar&#40;&#41;&#41; return FALSE&#59; &#63;&#62;</code>'; }, //Callback
+			'installation-instructions' // Section page slug
 		);
 		
 		add_settings_section(
