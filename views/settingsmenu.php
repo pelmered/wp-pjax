@@ -48,8 +48,8 @@ class WPPjaxSettingsPage
 		$this->options = get_option('my_option_name');
 		$this->wp_pjax_options = get_option(WP_PJAX_OPTIONS_KEY);
 		
-		var_dump($this->options);
-		var_dump($this->wp_pjax_options);
+		// var_dump($this->options);
+		// var_dump($this->wp_pjax_options);
 		?>
 		<div class="wrap">
 			<h2>WP-PJAX Settings</h2>		   
