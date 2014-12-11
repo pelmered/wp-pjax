@@ -20,8 +20,8 @@ class WPPjaxSettingsPage
 	 */
 	public function __construct()
 	{
-		add_action('admin_menu', [$this, 'add_plugin_page']);
-		add_action('admin_init', [$this, 'page_init']);
+            add_action('admin_menu', array($this, 'add_plugin_page'));
+            add_action('admin_init', array($this, 'page_init'));
 	}
 
 	/*
@@ -35,7 +35,7 @@ class WPPjaxSettingsPage
 			'WP-PJAX', 
 			'manage_options', 
 			'wp-pjax-settings', 
-			[$this, 'create_admin_page'] //function() { $this->create_admin_page(); }
+			array($this, 'create_admin_page') //function() { $this->create_admin_page(); }
 		);
 	}
 
@@ -75,7 +75,7 @@ class WPPjaxSettingsPage
 		register_setting(
 			'wp_pjax_option_group', // Option group
 			WP_PJAX_OPTIONS_KEY, // Option name
-			[$this, 'sanitize']
+			array($this, 'sanitize')
 		);
 
 		add_settings_section(
@@ -97,7 +97,7 @@ class WPPjaxSettingsPage
 			'Enable', // Title
 			'wp-pjax-selectors', // Section page slug
 			'wp_pjax_selectors', // Section ID
-			[ 'type' => 'checkbox', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'checkbox', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 		
 		$this->add_settings_input_field(
@@ -105,7 +105,7 @@ class WPPjaxSettingsPage
 			'Menu selector',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
-			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 		
 		$this->add_settings_input_field(
@@ -113,7 +113,7 @@ class WPPjaxSettingsPage
 			'Content selector',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
-			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 		
 		$this->add_settings_input_field(
@@ -121,7 +121,7 @@ class WPPjaxSettingsPage
 			'Menu active class',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
-			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 		
 		add_settings_section(
@@ -136,7 +136,7 @@ class WPPjaxSettingsPage
 			'Handler working before page load',
 			'wp-pjax-handlers',
 			'wp_pjax_handlers',
-			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 		
 		$this->add_settings_input_field(
@@ -144,7 +144,7 @@ class WPPjaxSettingsPage
 			'Handler working after page load',
 			'wp-pjax-handlers',
 			'wp_pjax_handlers',
-			[ 'type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options ]
+			array('type' => 'text', 'option_name' => WP_PJAX_OPTIONS_KEY, 'option_array' => &$this->wp_pjax_options)
 		);
 	}
 
@@ -197,10 +197,10 @@ class WPPjaxSettingsPage
 		add_settings_field(
 			$id, // ID
 			$title, // Title 
-			[$this, 'add_input_callback'], // Callback
+			array($this, 'add_input_callback'), // Callback
 			$page, // Page
 			$section_id, // Section		   
-			array_merge([ 'id' => $id ], $args)
+			array_merge(array( 'id' => $id ), $args)
 		);
 	}
 	
