@@ -1,12 +1,6 @@
 <?php
 //http://codex.wordpress.org/Creating_Options_Pages example #2
 
-if (is_admin()) {
-	define('WP_DEBUG', true);
-	error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-	ini_set("display_errors", 1);
-}
-
 class WPPjaxSettingsPage
 {
 	/*
@@ -20,8 +14,8 @@ class WPPjaxSettingsPage
 	 */
 	public function __construct()
 	{
-            add_action('admin_menu', array($this, 'add_plugin_page'));
-            add_action('admin_init', array($this, 'page_init'));
+		add_action('admin_menu', array($this, 'add_plugin_page'));
+		add_action('admin_init', array($this, 'page_init'));
 	}
 
 	/*

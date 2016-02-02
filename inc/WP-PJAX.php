@@ -74,7 +74,7 @@ class WP_PJAX_WP_PJAX
             {
                 add_action('send_headers', array(&$this, 'send_headers'), 2, 999 );  
             
-                $this->page_cache = &wp_pjax_get_instance('PageCache');
+                $this->page_cache = wp_pjax_get_instance('PageCache');
                 $this->page_cache->init( $this->_config );
                 
                 
@@ -111,7 +111,7 @@ class WP_PJAX_WP_PJAX
         
         if( $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch'] == 1)// && $_SERVER['REQUEST_URI'] == '/' )
         {
-            $this->page_cache = &wp_pjax_get_instance('PageCachePrefetch'); //&
+            $this->page_cache = wp_pjax_get_instance('PageCachePrefetch'); //&
             $this->page_cache->init( $this->_config );
 
             //add_action('send_headers', array(&$this, 'send_headers'), 1, 999 );  

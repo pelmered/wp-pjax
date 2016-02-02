@@ -93,11 +93,11 @@ if(!function_exists( 'is_pjax_request' ))
 {
         function is_pjax_request()
     {
-        if(defined('IS_PJAX' && IS_PJAX))
+        if(defined('IS_PJAX') && IS_PJAX)
         {
             return TRUE;
         }
-        else if(defined('IS_PJAX' && !IS_PJAX))
+        else if(defined('IS_PJAX') && !IS_PJAX)
         {
             return FALSE;
         }
