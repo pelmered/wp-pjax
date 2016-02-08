@@ -1,6 +1,7 @@
 #WP-PJAX - PJAX for Wordpress Plugin.
 =======
 
+[2016-02-07] : Major refactor in progress. 
 
 ======
 Makes your site faster and saves you a lot of bandwidth and CPU power by making your Wordpress site PJAX powered!
