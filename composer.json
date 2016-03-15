@@ -1,0 +1,6 @@
+{
+    "name": "eimanavicius/wp-pjax",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "require": {}
+}
