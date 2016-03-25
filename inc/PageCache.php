@@ -10,154 +10,135 @@
  *
  * @author Peter Elmered
  */
-
-
-
-
 class WP_PJAX_PageCache
 {
+
     public $key;
+
     public $status;
+
     var $_config;
-    
+
     function init($config)
     {
         $this->_config = $config;
-        
+
         //apply_filters('wp_pjax_use_pg', $wp_pjax_options))
-        
-        
+
         //die('asdasd');
-        add_filter( 'wp_pjax_use_pg', array( &$this, 'use_pg' ), 1, 1 ); 
-        add_action('parse_request', array(&$this, 'page_cache'), 1, 1 );   
+        add_filter('wp_pjax_use_pg', array(&$this, 'use_pg'), 1, 1);
+        add_action('parse_request', array(&$this, 'page_cache'), 1, 1);
     }
-    
+
     function use_pg($wp)
     {
         //print_r($wp);
         //Do not serve cached pages to prefetch
-        if( wp_pjax_check_request('HTTP_X_WP_PJAX_PREFETCH')  )
-        {
-            return FALSE;
+        if (wp_pjax_check_request('HTTP_X_WP_PJAX_PREFETCH')) {
+            return false;
         }
-        
-        $exceptions = explode("\n", $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']);
-        
+
+        $exceptions = explode("\n", $this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-exceptions']);
+
         //print_r($exceptions);
-        
-        foreach( $wp->query_vars AS $qv )
-        {
-            if( empty($qv) )
-            {
+
+        foreach ($wp->query_vars as $qv) {
+            if (empty($qv)) {
                 continue;
             }
-            
-            foreach( $exceptions AS $e )
-            {
+
+            foreach ($exceptions as $e) {
                 //echo $qv . '___'.$e."\n\n";
-                
-                if(strpos($e, $qv) !== false) 
-                {
-                    return FALSE;
+
+                if (strpos($e, $qv) !== false) {
+                    return false;
                 }
             }
-            
-            
         }
-        
-        
+
 //        $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
-        
-        
-        
-        return TRUE;
+
+        return true;
     }
-        
-    function page_cache( $wp )
+
+    function page_cache($wp)
     {
-        
-        if( !apply_filters('wp_pjax_use_pg', $wp) )
-        {
+
+        if (!apply_filters('wp_pjax_use_pg', $wp)) {
             $this->status = 'SKIP';
-            return NULL;
+            return null;
         }
-        
-        $page_content = get_transient( $this->get_key() );
-        
-        //var_dump($page_content); 
-        
-        if ( $page_content !== FALSE )  
-        {  
+
+        $page_content = get_transient($this->get_key());
+
+        //var_dump($page_content);
+
+        if ($page_content !== false) {
             $this->status = 'HIT';
-            
+
             do_action('send_headers', $wp, $this);
-            
-            do_action('wp_pjax_header', $wp, $this, $this->status );
-            
+
+            do_action('wp_pjax_header', $wp, $this, $this->status);
+
             echo $page_content;
             die();
-        }
-        else
-        {
+        } else {
             $this->status = 'MISS';
             //do_action('send_headers', $wp, $this);
             //do_action('wp_pjax_header', $wp, $this, $this->status );
-            return FALSE;
+            return false;
         }
     }
-    
-    function get_key(  )
+
+    function get_key()
     {
-        if( empty($this->key ))
-        {
-            $key = $this->generate_page_cache_key( );
-        }
-        else
-        {
+        if (empty($this->key)) {
+            $key = $this->generate_page_cache_key();
+        } else {
             $key = $this->key;
         }
-        
+
         return $key;
     }
-    
-    function generate_page_cache_key( )
+
+    function generate_page_cache_key()
     {
         global $wp;
-        
+
         $key = WP_PJAX_TRANIENT_PREFIX;
-        
-        if(empty($wp->query_vars))
-        {
+
+        if (empty($wp->query_vars)) {
             $key .= '_index';
-        }
-        else 
-        {
-            foreach( $wp->query_vars AS $k => $v )
-            {
-                if(empty($v))
-                {
+        } else {
+            foreach ($wp->query_vars as $k => $v) {
+                if (empty($v)) {
                     $v = 'na';
                 }
-                $key .= '_'.$k.'-'.$v;
+                $key .= '_' . $k . '-' . $v;
             }
         }
-        
+
         $this->key = $key;
-        
+
         return $key;
     }
-    
+
     function set($page_content)
     {
-        return set_transient( $this->get_key(), $page_content, $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] );
+        return set_transient(
+            $this->get_key(),
+            $page_content,
+            $this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-lifetime']
+        );
     }
-    
+
     function clearCache()
     {
         global $wpdb;
-        
-        $wpdb->query( "DELETE FROM ". $wpdb->prefix ."options WHERE option_name LIKE ('_transient_".WP_PJAX_TRANIENT_PREFIX."%')" );
+
+        $wpdb->query(
+            "DELETE FROM " . $wpdb->prefix . "options " .
+            "WHERE option_name LIKE ('_transient_" . WP_PJAX_TRANIENT_PREFIX . "%')"
+        );
     }
-    
-    
 }
