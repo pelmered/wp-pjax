@@ -1,7 +1,9 @@
 <?php
 
-if (empty($this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector'])
-    || empty($this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector'])
+/** @var WP_PJAX_WP_PJAX $this */
+
+if (empty($this->config[WP_PJAX_CONFIG_PREFIX.'menu-selector'])
+    || empty($this->config[WP_PJAX_CONFIG_PREFIX.'content-selector'])
 ) {
     trigger_error(
         'ERROR: WP-PJAX Not set up correctly. Not loading JS. ' .
@@ -11,8 +13,8 @@ if (empty($this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector'])
     return '';
 }
 
-if (!empty($this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'])) {
-    $active_classes = explode(' ', $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']);
+if (!empty($this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'])) {
+    $active_classes = explode(' ', $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']);
 
     $active_classes = '.' . implode(', .', $active_classes);
 }
@@ -27,13 +29,13 @@ var time;
 
 (function ($) {
     $(document).pjax(
-        '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>',
-        '<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>'
+        '<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>',
+        '<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>'
     );
 
-    <?php if (!empty($this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout'])) : ?>
-    $.pjax.defaults.timeout = <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout']; ?>;
-    <?php elseif ($this->_config[WP_PJAX_CONFIG_PREFIX.'load-timeout'] == '0') : ?>
+    <?php if (!empty($this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout'])) : ?>
+    $.pjax.defaults.timeout = <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout']; ?>;
+    <?php elseif ($this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout'] == '0') : ?>
     $.pjax.defaults.timeout = false;
     <?php endif; ?>
 
@@ -44,40 +46,40 @@ var time;
     $(document).on('pjax:beforeSend', function (event, xhr, settings) {
         //Remove old link active classes
         $('<?php echo $active_classes; ?>')
-            .removeClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+            .removeClass('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
     });
 
     $(document).on('pjax:start', function (event, xhr, settings) {
         Array.prototype
             .map
-            .call(document.querySelector('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
+            .call(document.querySelector('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
                       .querySelectorAll("iframe"), function (iframe) {
                       iframe.src = "about:blank";
                   });
         <?php
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler']) {
-            print $this->_config[WP_PJAX_CONFIG_PREFIX.'pre-handler'];
+        if ($this->config[WP_PJAX_CONFIG_PREFIX.'pre-handler']) {
+            print $this->config[WP_PJAX_CONFIG_PREFIX.'pre-handler'];
         }
         ?>
 
 
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
         var d = new Date();
         time = d.getTime();
         <?php endif; ?>
 
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
 
-        $('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
-            .animate({opacity: 0.1}, <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-out']; ?>);
+        $('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
+            .animate({opacity: 0.1}, <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-out']; ?>);
 
         <?php endif; ?>
     });
 
     $(document).on('pjax:end', function (event, request, settings) {
         <?php
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX.'post-handler']) {
-            print $this->_config[WP_PJAX_CONFIG_PREFIX.'post-handler'];
+        if ($this->config[WP_PJAX_CONFIG_PREFIX.'post-handler']) {
+            print $this->config[WP_PJAX_CONFIG_PREFIX.'post-handler'];
         }
         ?>
 
@@ -88,19 +90,19 @@ var time;
         //add link active classes
         $("a[href$='" + url.pathname + "']")
             .parent()
-            .addClass('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+            .addClass('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
 
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
 
-        $('<?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
-            .animate({opacity: 1}, <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>);
+        $('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
+            .animate({opacity: 1}, <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>);
 
         <?php endif; ?>
 
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
 
         var noticeText;
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
         var cacheHit = request.getResponseHeader('PJAX-Page-Cache');
         var XCacheHit = request.getResponseHeader('X-Cache-Hit');
         var resource = request.getResponseHeader('PJAX-loaded-resource');
@@ -120,10 +122,10 @@ var time;
 
         $.noticeAdd({
             text: noticeText,
-            <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'notice-sticky']) : ?>
+            <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'notice-sticky']) : ?>
             stay: true
             <?php else : ?>
-            stayTime: <?php echo $this->_config[WP_PJAX_CONFIG_PREFIX.'notice-timeout']; ?>
+            stayTime: <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'notice-timeout']; ?>
             <?php endif; ?>
         });
 
@@ -131,7 +133,7 @@ var time;
     });
 
     $(document).ready(function () {
-        <?php if ($this->_config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
+        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
 
         if (!$.support.pjax) {
             $('#wp-pjax-toggle-container')
