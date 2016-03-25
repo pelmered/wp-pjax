@@ -1,6 +1,7 @@
 ### Vendor (e.g. Composer, NPM, Bower)
 vendor/*
 !vendor/.gitkeep
+composer.lock
 node_modules/
 bower_components/
 

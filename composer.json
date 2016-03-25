@@ -2,5 +2,7 @@
     "name": "eimanavicius/wp-pjax",
     "type": "wordpress-plugin",
     "license": "MIT",
-    "require": {}
+    "require": {
+        "php": ">=5.3.3"
+    }
 }
