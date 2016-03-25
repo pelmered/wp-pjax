@@ -13,29 +13,29 @@
 class WP_PJAX_Config
 {
 
-    private $_config = null;
+    private $config = null;
 
     public function __construct()
     {
-        $this->_config = $this->get();
+        $this->config = $this->get();
     }
 
     function get()
     {
-        if (empty($this->_config)) {
+        if (empty($this->config)) {
             $this->load();
         }
 
-        return $this->_config;
+        return $this->config;
     }
 
     function load()
     {
         //Load plugins options
-        $this->_config = get_option(WP_PJAX_OPTIONS_KEY, false);
+        $this->config = get_option(WP_PJAX_OPTIONS_KEY, false);
 
         //If not set, add the option
-        if (!$this->_config) {
+        if (!$this->config) {
             add_option(WP_PJAX_OPTIONS_KEY, array(), '', 'yes');
         }
     }
@@ -103,7 +103,7 @@ class WP_PJAX_Config
 
         if (isset($_POST[WP_PJAX_CONFIG_PREFIX . 'clear-cache'])) {
             $page_cache = wp_pjax_get_instance('PageCache');
-            $page_cache->init($this->_config);
+            $page_cache->init($this->config);
             $page_cache->clearCache();
 
             echo '<div id="setting-error-settings_updated" class="updated settings-error">',

@@ -25,7 +25,7 @@ class WP_PJAX_Log
             $this->setFile('error');
         }
 
-        return fwrite($this->fh, $this->_format_log($msg));
+        return fwrite($this->fh, $this->formatLog($msg));
     }
 
     public function setFile($filename)
@@ -33,7 +33,7 @@ class WP_PJAX_Log
         $this->fh = fopen(WP_PJAX_PLUGIN_PATH . 'logs' . DIRECTORY_SEPARATOR . $filename, 'a');
     }
 
-    private function _format_log($msg)
+    private function formatLog($msg)
     {
         return '[' . date('Y-m-d h:i:s') . '] ' . $msg . "\n\n";
     }

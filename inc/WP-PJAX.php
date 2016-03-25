@@ -18,7 +18,7 @@ class WP_PJAX_WP_PJAX
 
     var $is_pjax; //Is current request PJAX?
 
-    var $_config = array();
+    private $config = array();
 
     var $plugin_url;
 
@@ -39,9 +39,9 @@ class WP_PJAX_WP_PJAX
         $this->plugin_path = plugin_dir_path(dirname(__FILE__));
 
         $config = wp_pjax_get_instance('Config');
-        $this->_config = $config->get();
+        $this->config = $config->get();
 
-        //$this->_config['debug_mode'] = TRUE;
+        //$this->config['debug_mode'] = TRUE;
 
         if (is_admin()) {
             //Add admin settings menu item
@@ -57,26 +57,25 @@ class WP_PJAX_WP_PJAX
             );
         }
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'enable'] !== 'checked') {
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'enable'] !== 'checked') {
             return;
         }
 
         $this->is_pjax = is_pjax_request();
 
         global $wp_pjax_options;
-        $wp_pjax_options = $this->_config;
+        $wp_pjax_options = $this->config;
 
         //    add_action('plugins_loaded', array($this, 'test'), 1);    // lower priority - allow packages to load
 
         if ($this->is_pjax) {
-
-            if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
+            if ($this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
                 add_action('send_headers', array(&$this, 'send_headers'), 2, 999);
 
                 $this->page_cache = wp_pjax_get_instance('PageCache');
-                $this->page_cache->init($this->_config);
+                $this->page_cache->init($this->config);
                 //add_action('send_headers', array(&$this, 'send_headers'), 1, 999 );
-            } elseif ($this->_config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice'] == 1) {
+            } elseif ($this->config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice'] == 1) {
                 header('PJAX-Page-Cache: DISABLED');
             }
 
@@ -101,11 +100,11 @@ class WP_PJAX_WP_PJAX
         //Add style and scripts to header
         //add_action('wp_head', array(&$this, 'enqueue_assets') );
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch'] == 1
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch'] == 1
             //&& $_SERVER['REQUEST_URI'] == '/'
         ) {
             $this->page_cache = wp_pjax_get_instance('PageCachePrefetch'); //&
-            $this->page_cache->init($this->_config);
+            $this->page_cache->init($this->config);
             //add_action('send_headers', array(&$this, 'send_headers'), 1, 999 );
         }
 
@@ -139,7 +138,7 @@ class WP_PJAX_WP_PJAX
             //Attemt to cache the HTML in the browser cache
             //But do not serve cached pages to prefetch
             if (!wp_pjax_check_request('HTTP_X_WP_PJAX_PREFETCH')
-                && $this->_config[WP_PJAX_CONFIG_PREFIX . 'browser-page-cache'] == 1
+                && $this->config[WP_PJAX_CONFIG_PREFIX . 'browser-page-cache'] == 1
             ) {
                 $seconds_to_cache = 650;
                 $ts = gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT";
@@ -150,7 +149,7 @@ class WP_PJAX_WP_PJAX
 
             //echo $_SERVER['HTTP_COOKIE'];
             // Unset cookies
-            if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'strip-cookies'] == 1 && isset($_SERVER['HTTP_COOKIE'])) {
+            if ($this->config[WP_PJAX_CONFIG_PREFIX . 'strip-cookies'] == 1 && isset($_SERVER['HTTP_COOKIE'])) {
                 $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
                 foreach ($cookies as $cookie) {
                     $parts = explode('=', $cookie);
@@ -162,9 +161,9 @@ class WP_PJAX_WP_PJAX
             }
         }
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice'] == 1
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice'] == 1
             && current_user_can('edit_plugins')
-            //|| $this->_config['debug_mode'] )
+            //|| $this->config['debug_mode'] )
         ) {
             header('PJAX-loaded-resource: ' . $pg->key);
 
@@ -209,9 +208,9 @@ class WP_PJAX_WP_PJAX
 
         add_action('wp_head', array(&$this, 'generate_js'));
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'show-notice'] == 1
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'show-notice'] == 1
             && current_user_can('edit_plugins')
-            || $this->_config['debug_mode']
+            || $this->config['debug_mode']
         ) {
             add_action(
                 'wp_enqueue_scripts',
@@ -227,9 +226,9 @@ class WP_PJAX_WP_PJAX
             );
         }
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'show-toggle'] == 1
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'show-toggle'] == 1
             && current_user_can('edit_plugins')
-            || $this->_config['debug_mode']
+            || $this->config['debug_mode']
         ) {
             add_action(
                 'wp_enqueue_scripts',
@@ -249,7 +248,7 @@ class WP_PJAX_WP_PJAX
 
     function generate_js()
     {
-        $wp_pjax_options = $this->_config;
+        $wp_pjax_options = $this->config;
         include $this->plugin_path . 'inc/WP-PJAX.js.php';
     }
 
@@ -258,14 +257,14 @@ class WP_PJAX_WP_PJAX
         $this->page_cache = new stdClass();
         $this->page_cache = wp_pjax_get_instance('PageCache');
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
             ob_start();
         }
 
         //Include the original WP template loader. This will output the right page template/content
         include ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'template-loader.php';
 
-        if ($this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
+        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache'] == 1) {
             $page_content = ob_get_clean();
             //echo $page_content;
             //wp_cache_set( 'pjax_post_'.$post_id, $page_content,  'pjax_page_cache', 300 );

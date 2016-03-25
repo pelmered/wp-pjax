@@ -13,13 +13,13 @@
 class WP_PJAX_PageCachePrefetch
 {
 
-    var $_config;
+    private $config;
 
     function init($config)
     {
         //return '';
 
-        $this->_config = $config;
+        $this->config = $config;
 
         //$this->prefetch();
 
@@ -73,7 +73,7 @@ class WP_PJAX_PageCachePrefetch
         // $urls = get_transient('WP_PJAX_PREFETCH_URLS_TANSIENT');
 
         if (!$urls) {
-            $sitemap_url = $this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url'];
+            $sitemap_url = $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url'];
 
             $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
 
@@ -85,7 +85,7 @@ class WP_PJAX_PageCachePrefetch
             echo $msg;
         }
 
-        //print_r($this->_config);
+        //print_r($this->config);
         //die($sitemap_url);
 
         $url_count = count($urls);

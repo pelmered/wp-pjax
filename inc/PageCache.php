@@ -17,11 +17,11 @@ class WP_PJAX_PageCache
 
     public $status;
 
-    var $_config;
+    private $config;
 
     function init($config)
     {
-        $this->_config = $config;
+        $this->config = $config;
 
         //apply_filters('wp_pjax_use_pg', $wp_pjax_options))
 
@@ -38,7 +38,7 @@ class WP_PJAX_PageCache
             return false;
         }
 
-        $exceptions = explode("\n", $this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-exceptions']);
+        $exceptions = explode("\n", $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-exceptions']);
 
         //print_r($exceptions);
 
@@ -56,7 +56,7 @@ class WP_PJAX_PageCache
             }
         }
 
-//        $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
+//        $this->config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
 
         return true;
     }
@@ -128,7 +128,7 @@ class WP_PJAX_PageCache
         return set_transient(
             $this->get_key(),
             $page_content,
-            $this->_config[WP_PJAX_CONFIG_PREFIX . 'page-cache-lifetime']
+            $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-lifetime']
         );
     }
 
