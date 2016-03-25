@@ -16,22 +16,22 @@ require_once 'Util.php';
 class WP_PJAX_WP_PJAX
 {
 
-    var $is_pjax; //Is current request PJAX?
+    public $is_pjax; //Is current request PJAX?
 
     private $config = array();
 
-    var $plugin_url;
+    public $plugin_url;
 
-    var $plugin_path;
+    public $plugin_path;
 
-    var $page_cache;
+    public $page_cache;
 
     public function __construct()
     {
         $this->page_cache = new stdClass();
     }
 
-    function run()
+    public function run()
     {
         //Set plugin url
         $this->plugin_url = plugins_url() . '/wp-pjax';
@@ -115,19 +115,19 @@ class WP_PJAX_WP_PJAX
 
     }
 
-    function activate_plugin()
+    public function activate_plugin()
     {
     }
 
-    function deactivate_plugin()
+    public function deactivate_plugin()
     {
     }
 
-    function uninstall_plugin()
+    public function uninstall_plugin()
     {
     }
 
-    function send_headers($wp, $pg)
+    public function send_headers($wp, $pg)
     {
         if (!$pg) {
             $pg = $this->page_cache;
@@ -185,7 +185,7 @@ class WP_PJAX_WP_PJAX
     }
 
     //PJAX
-    function pjax_load()
+    public function pjax_load()
     {
         add_action(
             'wp_enqueue_scripts',
@@ -241,18 +241,18 @@ class WP_PJAX_WP_PJAX
         }
     }
 
-    function add_toggle_html()
+    public function add_toggle_html()
     {
         include $this->plugin_path . 'views/toggle.php';
     }
 
-    function generate_js()
+    public function generate_js()
     {
         $wp_pjax_options = $this->config;
         include $this->plugin_path . 'inc/WP-PJAX.js.php';
     }
 
-    function pjax_render($wp)
+    public function pjax_render($wp)
     {
         $this->page_cache = new stdClass();
         $this->page_cache = wp_pjax_get_instance('PageCache');

@@ -15,7 +15,7 @@ class WP_PJAX_PageCachePrefetch
 
     private $config;
 
-    function init($config)
+    public function init($config)
     {
         //return '';
 
@@ -36,7 +36,7 @@ class WP_PJAX_PageCachePrefetch
         }
     }
 
-    function addPrefetchCronSchedules($schedules)
+    public function addPrefetchCronSchedules($schedules)
     {
         // add prefetch interval schedule
         $schedules['wp_pjax_pg_prefetch'] = array(
@@ -51,7 +51,7 @@ class WP_PJAX_PageCachePrefetch
         return $schedules;
     }
 
-    function prefetch($start = 0)
+    public function prefetch($start = 0)
     {
 
         $log = wp_pjax_get_instance('Log');

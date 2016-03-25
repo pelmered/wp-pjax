@@ -19,7 +19,7 @@ class WP_PJAX_PageCache
 
     private $config;
 
-    function init($config)
+    public function init($config)
     {
         $this->config = $config;
 
@@ -30,7 +30,7 @@ class WP_PJAX_PageCache
         add_action('parse_request', array(&$this, 'page_cache'), 1, 1);
     }
 
-    function use_pg($wp)
+    public function use_pg($wp)
     {
         //print_r($wp);
         //Do not serve cached pages to prefetch
@@ -61,7 +61,7 @@ class WP_PJAX_PageCache
         return true;
     }
 
-    function page_cache($wp)
+    public function page_cache($wp)
     {
 
         if (!apply_filters('wp_pjax_use_pg', $wp)) {
@@ -90,7 +90,7 @@ class WP_PJAX_PageCache
         }
     }
 
-    function get_key()
+    public function get_key()
     {
         if (empty($this->key)) {
             $key = $this->generate_page_cache_key();
@@ -101,7 +101,7 @@ class WP_PJAX_PageCache
         return $key;
     }
 
-    function generate_page_cache_key()
+    public function generate_page_cache_key()
     {
         global $wp;
 
@@ -123,7 +123,7 @@ class WP_PJAX_PageCache
         return $key;
     }
 
-    function set($page_content)
+    public function set($page_content)
     {
         return set_transient(
             $this->get_key(),
@@ -132,7 +132,7 @@ class WP_PJAX_PageCache
         );
     }
 
-    function clearCache()
+    public function clearCache()
     {
         global $wpdb;
 

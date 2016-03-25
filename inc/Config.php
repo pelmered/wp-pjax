@@ -20,7 +20,7 @@ class WP_PJAX_Config
         $this->config = $this->get();
     }
 
-    function get()
+    public function get()
     {
         if (empty($this->config)) {
             $this->load();
@@ -29,7 +29,7 @@ class WP_PJAX_Config
         return $this->config;
     }
 
-    function load()
+    protected function load()
     {
         //Load plugins options
         $this->config = get_option(WP_PJAX_OPTIONS_KEY, false);
@@ -43,7 +43,7 @@ class WP_PJAX_Config
     /**
      * Add admin settingspage
      */
-    function admin_pages()
+    public function admin_pages()
     {
         add_options_page('WP PJAX', 'WP-PJAX', 'manage_options', 'pe-wp-pjax', array($this, 'configuration_page'));
     }
@@ -52,7 +52,7 @@ class WP_PJAX_Config
      * Prints the content of the configuration page
      */
 
-    function configuration_page()
+    public function configuration_page()
     {
 
         if (!current_user_can('manage_options')) {
@@ -142,7 +142,7 @@ class WP_PJAX_Config
         include WP_PJAX_PLUGIN_PATH . 'views/configuration.php';
     }
 
-    function get_defaults()
+    public function get_defaults()
     {
         return array(
             WP_PJAX_CONFIG_PREFIX . 'menu-selector' => 'body a',

@@ -13,7 +13,7 @@
 class WP_PAJX_Util
 {
 
-    function __construct()
+    public function __construct()
     {
     }
 
@@ -23,7 +23,7 @@ class WP_PAJX_Util
      * @param type $sitemap_url Link to sitemap
      * @return array $urls Array of urls;
      */
-    static function parse_sitemap2($sitemap_url)
+    public static function parse_sitemap2($sitemap_url)
     {
         //$sitemap_url = 'http://kbc.debug.nu/post-sitemap.xml';
 
@@ -67,7 +67,7 @@ class WP_PAJX_Util
      * @param string $url
      * @return array
      */
-    function parse_sitemap($url)
+    public function parse_sitemap($url)
     {
         //w3_require_once(W3TC_INC_DIR . '/functions/http.php');
 
