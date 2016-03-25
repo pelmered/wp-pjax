@@ -1,12 +1,7 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of PageCachePrefetch
+ * Class WP_PJAX_PageCachePrefetch
  *
  * @author Peter Elmered
  */
@@ -17,13 +12,7 @@ class WP_PJAX_PageCachePrefetch
 
     public function init($config)
     {
-        //return '';
-
         $this->config = $config;
-
-        //$this->prefetch();
-
-        //wp_clear_scheduled_hook('wp-pjax-pg-prefetch');
 
         //Add cron schedule for prefetch
         add_filter('cron_schedules', array($this, 'addPrefetchCronSchedules'));
@@ -31,8 +20,7 @@ class WP_PJAX_PageCachePrefetch
         add_action('wp-pjax-pg-prefetch', array(&$this, 'prefetch'));
 
         if (!wp_next_scheduled('wp-pjax-pg-prefetch')) {
-            $r = wp_schedule_event(current_time('timestamp'), 'wp_pjax_pg_prefetch', 'wp-pjax-pg-prefetch');
-            var_dump($r);
+            wp_schedule_event(current_time('timestamp'), 'wp_pjax_pg_prefetch', 'wp-pjax-pg-prefetch');
         }
     }
 
@@ -53,13 +41,8 @@ class WP_PJAX_PageCachePrefetch
 
     public function prefetch($start = 0)
     {
-
         $log = wp_pjax_get_instance('Log');
         $log->setFile('prefetch');
-
-        //define('WP_DEBUG', true);
-        //error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-        //ini_set("display_errors", 1);
 
         $start_time = microtime(true);
 
@@ -70,32 +53,20 @@ class WP_PJAX_PageCachePrefetch
 
         echo 'Max exec time: ' . $max_exec_time;
 
-        // $urls = get_transient('WP_PJAX_PREFETCH_URLS_TANSIENT');
+        $sitemap_url = $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url'];
 
-        if (!$urls) {
-            $sitemap_url = $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url'];
+        $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
 
-            $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
+        set_transient('WP_PJAX_PREFETCH_URLS_TANSIENT', $urls, 86400 + 3600);
 
-            set_transient('WP_PJAX_PREFETCH_URLS_TANSIENT', $urls, 86400 + 3600);
+        $msg = 'Page index refreshed. ' . count($urls) . ' URLs added.';
 
-            $msg = 'Page index refreshed. ' . count($urls) . ' URLs added.';
-
-            $log->write($msg);
-            echo $msg;
-        }
-
-        //print_r($this->config);
-        //die($sitemap_url);
-
-        $url_count = count($urls);
+        $log->write($msg);
+        echo $msg;
 
         print_r($urls);
 
-        $last_prefetch = get_transient('WP_PJAX_LAST_PREFETCH');
-
-        if ($last_prefetch === false) {
-        }
+        get_transient('WP_PJAX_LAST_PREFETCH');
 
         $queue = array_slice($urls, $start);
 
@@ -111,7 +82,6 @@ class WP_PJAX_PageCachePrefetch
                 'X_Requested_With' => 'XMLHttpRequest',
                 'HTTP_X_WP_PJAX_PREFETCH' => 'true',
             ),
-//            'blocking' => FALSE,
             'timeout' => $timeout,
         );
 
@@ -135,27 +105,12 @@ class WP_PJAX_PageCachePrefetch
                 continue;
             }
 
-            //echo "\nRequest ".$i.": ".$time_elapsed."\n";
-
-            //echo $url."\n";
-
             $r = wp_remote_request($url, $args);
 
             if (is_array($r)) {
-
                 $pages_fetched++;
-                /*
-                echo 'body length: '.strlen($r['body'])."\n";
-
-                unset($r['body']);
-                
-                print_r($r['headers']);
-                
-                echo "\n\n\n\n\n";
-                */
             } else {
                 $pages_fetched++;
-                //print_r($r);
             }
         }
 

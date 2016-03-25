@@ -1,9 +1,5 @@
 <?php
 
-/*
- * Define constants for WP-PJAX
- */
-
 define('WP_PJAX_PLUGIN_INCLUDE_PATH', WP_PJAX_PLUGIN_PATH . 'inc' . DIRECTORY_SEPARATOR);
 
 define('WP_PJAX_OPTIONS_KEY', 'pe_wp_pjax_options');

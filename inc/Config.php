@@ -1,12 +1,7 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Config
+ * Class WP_PJAX_Config
  *
  * @author Peter Elmered
  */
@@ -137,8 +132,6 @@ class WP_PJAX_Config
             '<p><strong>Default settings loaded!</strong></p></div>';
         }
 
-        //print_r($wp_pjax_options);
-
         include WP_PJAX_PLUGIN_PATH . 'views/configuration.php';
     }
 
@@ -161,7 +154,6 @@ class WP_PJAX_Config
             WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch' => 0,
             WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-interval' => 300,
             WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-pages-per-interval' => 20,
-            //WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-url' => '',
             WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-refresh-interval' => 6000,
         );
     }

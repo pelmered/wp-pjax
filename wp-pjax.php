@@ -26,19 +26,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-//define('WP_DEBUG', true);
-//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-//ini_set("display_errors", 1);
-
 define('WP_PJAX_PLUGIN_URL', plugins_url() . '/wp-pjax');
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
-require_once(WP_PJAX_PLUGIN_PATH . 'inc/define.php');
-require_once(WP_PJAX_PLUGIN_PATH . 'views/settingsmenu.php');
+require_once WP_PJAX_PLUGIN_PATH . 'inc/define.php';
+require_once WP_PJAX_PLUGIN_PATH . 'views/settingsmenu.php';
 
-/**
- * Make sure this plugin is loaded first!
- */
+// Make sure this plugin is loaded first!
 add_action("activated_plugin", "load_this_plugin_first");
 function load_this_plugin_first()
 {
@@ -71,18 +65,8 @@ function wp_pjax_get_instance($class)
         $instances[$class] = new $classname();
     }
 
-    return $instances[$class];   // Don't return reference
+    return $instances[$class]; // Don't return reference
 }
-
-/*
-function wp_pjax_init() 
-{
-	
-  $WP_PJAX = new WP_PJAX();
-    
-}
-add_action( 'plugins_loaded', 'wp_pjax_init' );
-*/
 
 global $wp_pjax_options;
 
@@ -139,6 +123,7 @@ if (!function_exists('get_pjax_header')) {
         }
     }
 }
+
 if (!function_exists('get_pjax_footer')) {
     function get_pjax_footer()
     {
@@ -153,6 +138,7 @@ if (!function_exists('get_pjax_footer')) {
         }
     }
 }
+
 if (!function_exists('get_pjax_sidebar')) {
     function get_pjax_sidebar()
     {
@@ -180,26 +166,14 @@ if (!function_exists('wp_pjax_header')) {
             header('PJAX-loaded-resource: ' . $pjax->page_cache['key']);
         }
 
-        ?><title><?php
-        /*
-         * Print the <title> tag based on what is being viewed.
-         */
-        //global $page, $paged;
-
-        $title = apply_filters('wp_pjax_title', '');
-
-        echo $title;
-        ?></title><?php
+        // Print the <title> tag based on what is being viewed.
+        echo '<title>', apply_filters('wp_pjax_title', ''), '</title>';
     }
 }
 
 add_filter('wp_pjax_title', 'wp_pjax_title');
-
-function wp_pjax_title($title)
+function wp_pjax_title()
 {
-
-    $title = '';
-
     $title = wp_title('|', false, 'right');
 
     // Add the blog name.
@@ -214,21 +188,5 @@ function wp_pjax_title($title)
     return $title;
 }
 
-/* 
- * Instantiate the class
- */
-
 $wp_pjax = wp_pjax_get_instance('WP_PJAX');
-
 $wp_pjax->run();
-
-
-/*
-if (class_exists('WP_PJAX')) {
-  $WP_PJAX = new WP_PJAX();
-}
-else
-{
-//    trigger_error('ERROR: WP-PJAX Class not found: '.__FILE__ . ' (' .__LINE__ . ')', E_USER_WARNING );
-}
-*/

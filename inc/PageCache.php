@@ -1,12 +1,7 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of cache
+ * Class WP_PJAX_PageCache
  *
  * @author Peter Elmered
  */
@@ -23,16 +18,12 @@ class WP_PJAX_PageCache
     {
         $this->config = $config;
 
-        //apply_filters('wp_pjax_use_pg', $wp_pjax_options))
-
-        //die('asdasd');
         add_filter('wp_pjax_use_pg', array(&$this, 'use_pg'), 1, 1);
         add_action('parse_request', array(&$this, 'page_cache'), 1, 1);
     }
 
     public function use_pg($wp)
     {
-        //print_r($wp);
         //Do not serve cached pages to prefetch
         if (wp_pjax_check_request('HTTP_X_WP_PJAX_PREFETCH')) {
             return false;
@@ -40,23 +31,17 @@ class WP_PJAX_PageCache
 
         $exceptions = explode("\n", $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-exceptions']);
 
-        //print_r($exceptions);
-
         foreach ($wp->query_vars as $qv) {
             if (empty($qv)) {
                 continue;
             }
 
             foreach ($exceptions as $e) {
-                //echo $qv . '___'.$e."\n\n";
-
                 if (strpos($e, $qv) !== false) {
                     return false;
                 }
             }
         }
-
-//        $this->config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
 
         return true;
     }
@@ -71,8 +56,6 @@ class WP_PJAX_PageCache
 
         $page_content = get_transient($this->get_key());
 
-        //var_dump($page_content);
-
         if ($page_content !== false) {
             $this->status = 'HIT';
 
@@ -84,8 +67,6 @@ class WP_PJAX_PageCache
             die();
         } else {
             $this->status = 'MISS';
-            //do_action('send_headers', $wp, $this);
-            //do_action('wp_pjax_header', $wp, $this, $this->status );
             return false;
         }
     }

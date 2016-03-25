@@ -1,23 +1,19 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Log
+ * Class WP_PJAX_Log
  *
  * @author Peter Elmered
  */
 class WP_PJAX_Log
 {
 
-    private $fh = null; //Log file handle
-
-    public function __construct()
-    {
-    }
+    /**
+     * Log file handle
+     *
+     * @var resource|null
+     */
+    private $fh = null;
 
     public function write($msg)
     {
