@@ -12,7 +12,7 @@ class WP_PJAX_PageCache
 
     public $status;
 
-    private $config;
+    public $config;
 
     public function init($config)
     {

@@ -157,13 +157,18 @@ if (!function_exists('get_pjax_sidebar')) {
 if (!function_exists('wp_pjax_header')) {
     add_action('wp_pjax_header', 'wp_pjax_header', 10, 3);
 
-    function wp_pjax_header($wp, $pjax, $cacheHit)
+    /**
+     * @param $wp
+     * @param WP_PJAX_PageCache $pageCache
+     * @param $cacheHit
+     */
+    function wp_pjax_header($wp, $pageCache, $cacheHit)
     {
-        if ($pjax->_config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice']
+        if ($pageCache->config[WP_PJAX_CONFIG_PREFIX . 'show-extended-notice']
             && current_user_can('edit_plugins')
-            || $pjax->_config['debug_mode']
+            || $pageCache->config['debug_mode']
         ) {
-            header('PJAX-loaded-resource: ' . $pjax->page_cache['key']);
+            header('PJAX-loaded-resource: ' . $pageCache->key);
         }
 
         // Print the <title> tag based on what is being viewed.
