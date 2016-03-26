@@ -4,5 +4,15 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "johnpbloch/wordpress": "^4.4",
+        "phpunit/phpunit": "^4.8"
+    },
+    "extra": {
+        "wordpress-install-dir": "vendor/johnpbloch/wordpress"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

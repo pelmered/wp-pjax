@@ -1,3 +1,7 @@
+### test tools
+tests/wordpress/
+phpunit.xml
+
 ### Vendor (e.g. Composer, NPM, Bower)
 vendor/*
 !vendor/.gitkeep
