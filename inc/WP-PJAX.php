@@ -50,7 +50,9 @@ class WP_PJAX_WP_PJAX
             );
         }
 
-        if ($this->config[WP_PJAX_CONFIG_PREFIX . 'enable'] !== 'checked') {
+        if (!isset($this->config[WP_PJAX_CONFIG_PREFIX . 'enable'])
+            || $this->config[WP_PJAX_CONFIG_PREFIX . 'enable'] !== 'checked'
+        ) {
             return;
         }
 
