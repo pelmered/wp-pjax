@@ -26,11 +26,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define('WP_PJAX_PLUGIN_URL', plugins_url() . '/wp-pjax');
+require_once __DIR__ . '/vendor/autoload.php';
+
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
-require_once WP_PJAX_PLUGIN_PATH . 'inc/define.php';
-require_once WP_PJAX_PLUGIN_PATH . 'views/settingsmenu.php';
+if (is_admin()) {
+    $wp_pjax_settings_page = new WPPjaxSettingsPage();
+}
 
 // Make sure this plugin is loaded first!
 add_action("activated_plugin", "load_this_plugin_first");
@@ -56,10 +58,6 @@ function wp_pjax_get_instance($class)
     static $instances = array();
 
     if (!isset($instances[$class])) {
-        $filepath = WP_PJAX_PLUGIN_INCLUDE_PATH . str_replace('_', '-', $class) . '.php';
-        if (file_exists($filepath)) {
-            require_once($filepath);
-        }
         $classname = 'WP_PJAX_' . $class;
 
         $instances[$class] = new $classname();

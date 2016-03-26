@@ -239,7 +239,3 @@ class WPPjaxSettingsPage
         }
     }
 }
-
-if (is_admin()) {
-    $wp_pjax_settings_page = new WPPjaxSettingsPage();
-}

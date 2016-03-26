@@ -5,6 +5,15 @@
     "require": {
         "php": ">=5.3.3"
     },
+    "autoload": {
+        "classmap": [
+            "inc/",
+            "views/settingsmenu.php"
+        ],
+        "files": [
+            "inc/define.php"
+        ]
+    },
     "require-dev": {
         "johnpbloch/wordpress": "^4.4",
         "phpunit/phpunit": "^4.8"
