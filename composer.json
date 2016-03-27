@@ -14,9 +14,24 @@
             "inc/define.php"
         ]
     },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "wordpress/phpunit",
+                "version": "master",
+                "source": {
+                    "type": "svn",
+                    "url": "https://develop.svn.wordpress.org/trunk/tests/phpunit/",
+                    "reference": "includes"
+                }
+            }
+        }
+    ],
     "require-dev": {
         "johnpbloch/wordpress": "^4.4",
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^4.8",
+        "wordpress/phpunit": "dev-master"
     },
     "extra": {
         "wordpress-install-dir": "vendor/johnpbloch/wordpress"
