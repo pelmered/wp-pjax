@@ -1,7 +1,7 @@
 {
     "name": "eimanavicius/wp-pjax",
     "type": "wordpress-plugin",
-    "license": "MIT",
+    "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.3"
     },
