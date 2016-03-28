@@ -15,7 +15,7 @@ DB_HOST=${4-localhost}
 WP_VERSION=${5-latest}
 
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
-WP_CORE_DIR="$(pwd)/vendor/wordpress/wordpress"
+WP_CORE_DIR="$(pwd)/vendor/wordpress/wordpress/"
 
 download() {
     if [ `which curl` ]; then
