@@ -40,15 +40,24 @@
                     "reference": "includes"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "wordpress/wordpress",
+                "version": "4.4.2",
+                "source": {
+                    "type": "svn",
+                    "url": "https://develop.svn.wordpress.org/tags/4.4.2/",
+                    "reference": "src"
+                }
+            }
         }
     ],
     "require-dev": {
-        "johnpbloch/wordpress": "^4.4",
+        "wordpress/wordpress": "^4.4",
         "phpunit/phpunit": "^4.8",
         "wordpress/phpunit": "dev-master"
-    },
-    "extra": {
-        "wordpress-install-dir": "vendor/johnpbloch/wordpress"
     },
     "scripts": {
         "test": "phpunit"
