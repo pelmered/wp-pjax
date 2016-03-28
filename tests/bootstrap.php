@@ -13,6 +13,11 @@ if (!$_tests_dir) {
     $_tests_dir = '/tmp/wordpress-tests-lib';
 }
 
+$installed_plugin = dirname(__DIR__) . '/vendor/wordpress/wordpress/wp-content/plugins/wp-pjax';
+if (!is_link($installed_plugin)) {
+    symlink(dirname(__DIR__), $installed_plugin);
+}
+
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
