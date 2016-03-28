@@ -35,15 +35,16 @@ if (is_admin()) {
 }
 
 // Make sure this plugin is loaded first!
-add_action("activated_plugin", "load_this_plugin_first");
+add_action('activated_plugin', 'load_this_plugin_first');
 function load_this_plugin_first()
 {
-    $active_plugins = get_option('active_plugins');
-    $this_plugin_key = array_search(WP_PJAX_PLUGIN_PATH, $active_plugins);
-    if ($this_plugin_key) { // if it's 0 it's the first plugin already, no need to continue
-        array_splice($active_plugins, $this_plugin_key, 1);
-        array_unshift($active_plugins, WP_PJAX_PLUGIN_PATH);
-        update_option('active_plugins', $active_plugins);
+    $basename = plugin_basename(__FILE__);
+    $plugins = get_option('active_plugins');
+    $position = array_search($basename, $plugins);
+    if ($position > 0) {
+        array_splice($plugins, $position, 1);
+        array_unshift($plugins, $basename);
+        update_option('active_plugins', $plugins);
     }
 }
 
