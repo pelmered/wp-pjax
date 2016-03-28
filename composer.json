@@ -2,6 +2,18 @@
     "name": "eimanavicius/wp-pjax",
     "type": "wordpress-plugin",
     "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Peter Elmered",
+            "email": "peter@elmered.com",
+            "homepage": "http://www.elmered.com"
+        },
+        {
+            "name": "Nerijus Eimanavičius",
+            "email": "nerijus@eimanavicius.lt",
+            "homepage": "http://nerijus.eimanavicius.lt"
+        }
+    ],
     "require": {
         "php": ">=5.3.3"
     },
