@@ -34,19 +34,7 @@ if (is_admin()) {
     $wp_pjax_settings_page = new WPPjaxSettingsPage();
 }
 
-// Make sure this plugin is loaded first!
-add_action('activated_plugin', 'load_this_plugin_first');
-function load_this_plugin_first()
-{
-    $basename = plugin_basename(__FILE__);
-    $plugins = get_option('active_plugins');
-    $position = array_search($basename, $plugins);
-    if ($position > 0) {
-        array_splice($plugins, $position, 1);
-        array_unshift($plugins, $basename);
-        update_option('active_plugins', $plugins);
-    }
-}
+\WpPjax\PluginsLifecycleHooks::init(__FILE__);
 
 /**
  * Returns instance of singleton class

@@ -8,14 +8,25 @@ namespace WpPjax;
 
 use WP_UnitTestCase;
 
-class LoadThisPluginFirstFunctionTest extends WP_UnitTestCase
+class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase
 {
+
+    /**
+     * @var PluginsLifecycleHooks
+     */
+    protected $plugin;
+
+    function setUp()
+    {
+        parent::setUp();
+        $this->plugin = PluginsLifecycleHooks::init(realpath(ABSPATH . 'wp-content/plugins/wp-pjax/wp-pjax.php'));
+    }
 
     function test_do_nothing_when_no_plugin_will_beactive()
     {
         update_option('active_plugins', array());
 
-        load_this_plugin_first();
+        $this->plugin->makeSureWeWillBeLoadedFirst();
 
         $this->assertEquals(array(), get_option('active_plugins'));
     }
@@ -25,7 +36,7 @@ class LoadThisPluginFirstFunctionTest extends WP_UnitTestCase
         $activePlugins = array('seo/seo.php', 'wordfence/wordfence.php', 'wp-pjax.php');
         update_option('active_plugins', $activePlugins);
 
-        load_this_plugin_first();
+        $this->plugin->makeSureWeWillBeLoadedFirst();
 
         $this->assertEquals($activePlugins, get_option('active_plugins'));
     }
@@ -35,7 +46,7 @@ class LoadThisPluginFirstFunctionTest extends WP_UnitTestCase
         $active_plugins = array('wp-pjax/wp-pjax.php');
         update_option('active_plugins', $active_plugins);
 
-        load_this_plugin_first();
+        $this->plugin->makeSureWeWillBeLoadedFirst();
 
         $this->assertEquals($active_plugins, get_option('active_plugins'));
     }
@@ -45,7 +56,7 @@ class LoadThisPluginFirstFunctionTest extends WP_UnitTestCase
         $active_plugins = array('wp-pjax/wp-pjax.php', 'hello.php', 'zzz.php');
         update_option('active_plugins', $active_plugins);
 
-        load_this_plugin_first();
+        $this->plugin->makeSureWeWillBeLoadedFirst();
 
         $this->assertEquals($active_plugins, get_option('active_plugins'));
     }
@@ -55,7 +66,7 @@ class LoadThisPluginFirstFunctionTest extends WP_UnitTestCase
         $expected = array('seo/seo.php', 'wordfence/wordfence.php', 'wp-pjax/wp-pjax.php');
         update_option('active_plugins', $expected);
 
-        load_this_plugin_first();
+        $this->plugin->makeSureWeWillBeLoadedFirst();
 
         $expected = array('wp-pjax/wp-pjax.php', 'seo/seo.php', 'wordfence/wordfence.php');
         $actual = get_option('active_plugins');
