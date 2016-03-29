@@ -51,6 +51,19 @@ Parameters (2): current post object, wp_pjax options.
 
 Please not that these actions are only triggered for PJAX/partial responses.
 
+## Javascript events
+
+#### wp-pjax-pre-handler
+Triggered before PJAX AJAX request is sent
+
+```javascript 
+$( document.body ).on('wp-pjax-pre-handler'); 
+```
+
+
+wp-pjax-post-handler
+
+
 ## To-Do
 - Test in more themes
 - Add more multiple link/menu selectors with attached active CSS clases

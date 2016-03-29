@@ -19,17 +19,44 @@ class WP_PJAX_PageCache
     public $key;
     public $status;
     var $_config;
+    private $transient_cache_prefix = 'wp_pjax_pc_';
+
+    /**
+     * Instance of this class.
+     *
+     * @since    0.1.0
+     * @var      object
+     */
+    protected static $instance = null;
+
+
+    private function __construct() {
+
+    }
+    /**
+     * Return an instance of this class.
+     *
+     * @since     0.1.0
+     *
+     * @return    object    A single instance of this class.
+     */
+    public static function get_instance() {
+        // If the single instance hasn't been set, set it now.
+        if (null == self::$instance) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
     
-    function init($config)
+    function init()
     {
-        $this->_config = $config;
+        //$this->_config = $config;
         
         //apply_filters('wp_pjax_use_pg', $wp_pjax_options))
         
-        
-        //die('asdasd');
+
         add_filter( 'wp_pjax_use_pg', array( &$this, 'use_pg' ), 1, 1 ); 
-        add_action('parse_request', array(&$this, 'page_cache'), 1, 1 );   
+        add_action( 'parse_request', array( &$this, 'page_cache' ), 1, 1 );
     }
     
     function use_pg($wp)
@@ -40,9 +67,10 @@ class WP_PJAX_PageCache
         {
             return FALSE;
         }
-        
-        $exceptions = explode("\n", $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']);
-        
+
+        //$exceptions = explode("\n", wp_pjax_config()->get( 'page_cache_exceptions']);
+        $exceptions = explode("\n", wp_pjax_config()->get('page_cache_exceptions'));
+
         //print_r($exceptions);
         
         foreach( $wp->query_vars AS $qv )
@@ -66,7 +94,7 @@ class WP_PJAX_PageCache
         }
         
         
-//        $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-exceptions']
+//        wp_pjax_config()->get( 'page_cache_exceptions']
         
         
         
@@ -75,7 +103,6 @@ class WP_PJAX_PageCache
         
     function page_cache( $wp )
     {
-        
         if( !apply_filters('wp_pjax_use_pg', $wp) )
         {
             $this->status = 'SKIP';
@@ -84,8 +111,10 @@ class WP_PJAX_PageCache
         
         $page_content = get_transient( $this->get_key() );
         
-        //var_dump($page_content); 
-        
+        //var_dump($page_content);
+        //$page_content = false;
+
+
         if ( $page_content !== FALSE )  
         {  
             $this->status = 'HIT';
@@ -124,7 +153,7 @@ class WP_PJAX_PageCache
     {
         global $wp;
         
-        $key = WP_PJAX_TRANIENT_PREFIX;
+        $key = $this->transient_cache_prefix;
         
         if(empty($wp->query_vars))
         {
@@ -149,14 +178,14 @@ class WP_PJAX_PageCache
     
     function set($page_content)
     {
-        return set_transient( $this->get_key(), $page_content, $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-lifetime'] );
+        return set_transient( $this->get_key(), $page_content, wp_pjax_config()->get('page_cache_lifetime') );
     }
     
     function clearCache()
     {
         global $wpdb;
         
-        $wpdb->query( "DELETE FROM ". $wpdb->prefix ."options WHERE option_name LIKE ('_transient_".WP_PJAX_TRANIENT_PREFIX."%')" );
+        $wpdb->query( "DELETE FROM ". $wpdb->prefix ."options WHERE option_name LIKE ('_transient_".$this->transient_cache_prefix."%')" );
     }
     
     

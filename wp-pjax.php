@@ -33,7 +33,7 @@ License: http://www.gnu.org/licenses/gpl.html GNU General Public License
 define('WP_PJAX_PLUGIN_URL', plugins_url().'/wp-pjax');
 define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-require_once(WP_PJAX_PLUGIN_PATH.'inc/define.php');
+require_once(WP_PJAX_PLUGIN_PATH.'includes/define.php');
 require_once(WP_PJAX_PLUGIN_PATH.'views/settingsmenu.php');
 
 /**
@@ -67,11 +67,12 @@ function wp_pjax_get_instance($class) {
             require_once($filepath);
         }
         $classname = 'WP_PJAX_'.$class;
-        
-        $instances[$class] = new $classname();
+
+        $instances[$class] = $classname::get_instance();
     }
 
     return $instances[$class];   // Don't return reference
+
 }
 
 
@@ -91,26 +92,26 @@ global $wp_pjax_options;
 
 if(!function_exists( 'is_pjax_request' ))
 {
-        function is_pjax_request()
+    function is_pjax_request()
     {
-        if(defined('IS_PJAX') && IS_PJAX)
+        if(
+            ( defined('IS_PJAX') && IS_PJAX ) ||
+            ( array_key_exists( 'HTTP_X_PJAX', $_SERVER ) && $_SERVER['HTTP_X_PJAX'] ) ||
+            ( array_key_exists( 'X_PJAX', $_SERVER ) && $_SERVER['X_PJAX'] )
+        )
         {
+            if( !defined('IS_PJAX') )
+            {
+                define('IS_PJAX', TRUE);
+            }
             return TRUE;
         }
-        else if(defined('IS_PJAX') && !IS_PJAX)
-        {
-            return FALSE;
-        }
-        else if ( (array_key_exists('HTTP_X_PJAX', $_SERVER) && $_SERVER['HTTP_X_PJAX']) || (array_key_exists('X_PJAX', $_SERVER) && $_SERVER['X_PJAX']) )
-        {
-            define('IS_PJAX', TRUE);
-            return TRUE;
-        }
-        else
+
+        if( !defined('IS_PJAX') )
         {
             define('IS_PJAX', FALSE);
-            return FALSE;
         }
+        return FALSE;
     }
 }
 
@@ -203,7 +204,7 @@ if(!function_exists( 'wp_pjax_header' ))
     
     function wp_pjax_header($wp, $pjax, $cacheHit)
     {
-        if(  $pjax->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
+        if(  $pjax->_config[WP_PJAX_CONFIG_PREFIX.'show_extended_notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
         {
             header('PJAX-loaded-resource: '.$pjax->page_cache['key']);
         }
@@ -252,10 +253,14 @@ function wp_pjax_title($title) {
  * Instantiate the class
  */
 
+add_action( 'plugins_loaded', function() {
 
-$wp_pjax = wp_pjax_get_instance('WP_PJAX');
+    $wp_pjax = wp_pjax_get_instance('WP_PJAX');
 
-$wp_pjax->run();
+    $wp_pjax->run();
+
+});
+
 
 
 /*

@@ -95,7 +95,7 @@ class WPPjaxSettingsPage
 		);
 		
 		$this->add_settings_input_field(
-			WP_PJAX_CONFIG_PREFIX.'menu-selector',
+			WP_PJAX_CONFIG_PREFIX.'menu_selector',
 			'Menu selector',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
@@ -103,7 +103,7 @@ class WPPjaxSettingsPage
 		);
 		
 		$this->add_settings_input_field(
-			WP_PJAX_CONFIG_PREFIX.'content-selector',
+			WP_PJAX_CONFIG_PREFIX.'content_selector',
 			'Content selector',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
@@ -111,7 +111,7 @@ class WPPjaxSettingsPage
 		);
 		
 		$this->add_settings_input_field(
-			WP_PJAX_CONFIG_PREFIX.'menu-active-class',
+			WP_PJAX_CONFIG_PREFIX.'menu_active_class',
 			'Menu active class',
 			'wp-pjax-selectors',
 			'wp_pjax_selectors',
@@ -152,9 +152,9 @@ class WPPjaxSettingsPage
 		$output = array();
 		
 		$this->sanitizeCheckbox($output, $input, WP_PJAX_CONFIG_PREFIX.'enable');
-		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu-selector');
-		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'content-selector');
-		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu-active-class');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu_selector');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'content_selector');
+		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'menu_active_class');
 		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'pre-handler');
 		$this->sanitizeText($output, $input, WP_PJAX_CONFIG_PREFIX.'post-handler');
 

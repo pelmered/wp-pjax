@@ -13,7 +13,8 @@
  */
 class WP_PJAX_PageCachePrefetch
 {
-    
+
+    private $prefetch_urls_transient_key = 'wp_pjax_prefetch_urls';
     var $_config;
     
     function init($config)
@@ -44,19 +45,19 @@ class WP_PJAX_PageCachePrefetch
         
     }
     
-    function addPrefetchCronSchedules( $schedules ) 
+    function addPrefetchCronSchedules( $schedules )
     {
-	// add prefetch interval schedule
-	$schedules['wp_pjax_pg_prefetch'] = array(
-		'interval' => 300,
-		'display' => __('WP-PJAX Prefetch Interval')
-	);
-	// add url cache refresh interval schedule
-	$schedules['wp_pjax_pg_prefetch_urls'] = array(
-		'interval' => 300,
-		'display' => __('WP-PJAX URL cache refresh interval')
-	);
-	return $schedules;
+        // add prefetch interval schedule
+        $schedules['wp_pjax_pg_prefetch'] = array(
+            'interval' => 300,
+            'display' => __('WP-PJAX Prefetch Interval')
+        );
+        // add url cache refresh interval schedule
+        $schedules['wp_pjax_pg_prefetch_urls'] = array(
+            'interval' => 300,
+            'display' => __('WP-PJAX URL cache refresh interval')
+        );
+        return $schedules;
     }
     
     
@@ -82,18 +83,18 @@ class WP_PJAX_PageCachePrefetch
         
         echo 'Max exec time: '.$max_exec_time;
         
-        
-        
-	
-       // $urls = get_transient('WP_PJAX_PREFETCH_URLS_TANSIENT');
+
+        $urls = get_transient( $this->prefetch_urls_transient_key );
+
+        $urls = false;
 
         if( !$urls)
         {
-            $sitemap_url = $this->_config[WP_PJAX_CONFIG_PREFIX.'page-cache-prefetch-sitemap-url'];
+            $sitemap_url = wp_pjax_config()->get('page_cache_prefetch_sitemap_url');
 
             $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
             
-            set_transient('WP_PJAX_PREFETCH_URLS_TANSIENT', $urls, 86400 + 3600);
+            set_transient( $this->prefetch_urls_transient_key, $urls, 86400 + 3600);
             
             $msg ='Page index refreshed. '.count($urls).' URLs added.';
             
@@ -106,14 +107,14 @@ class WP_PJAX_PageCachePrefetch
         //die($sitemap_url);
         
         $url_count = count($urls);
-        
-		
-        
+
+
+
         print_r($urls);
-        
-     
-		
-		
+
+
+
+
         $last_prefetch = get_transient('WP_PJAX_LAST_PREFETCH');
         
         if( $last_prefetch === FALSE)
