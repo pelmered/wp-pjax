@@ -20,6 +20,9 @@
         "php": ">=5.3.3"
     },
     "autoload": {
+        "psr-0": {
+            "": "src/"
+        },
         "classmap": [
             "inc/",
             "views/settingsmenu.php"
