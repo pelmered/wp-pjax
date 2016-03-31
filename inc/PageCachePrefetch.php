@@ -38,8 +38,9 @@ class WP_PJAX_PageCachePrefetch {
 	}
 
 	public function prefetch( $start = 0 ) {
+		/** @var WP_PJAX_Log $log */
 		$log = wp_pjax_get_instance( 'Log' );
-		$log->setFile( 'prefetch' );
+		$log->set_file( 'prefetch' );
 
 		$start_time = microtime( true );
 

@@ -16,17 +16,17 @@ class WP_PJAX_Log {
 
 	public function write( $msg ) {
 		if ( ! $this->fh ) {
-			$this->setFile( 'error' );
+			$this->set_file( 'error' );
 		}
 
-		return fwrite( $this->fh, $this->formatLog( $msg ) );
+		return fwrite( $this->fh, $this->format_log( $msg ) );
 	}
 
-	public function setFile( $filename ) {
+	public function set_file( $filename ) {
 		$this->fh = fopen( WP_PJAX_PLUGIN_PATH . 'logs' . DIRECTORY_SEPARATOR . $filename, 'a' );
 	}
 
-	private function formatLog( $msg ) {
+	private function format_log( $msg ) {
 		return '[' . date( 'Y-m-d h:i:s' ) . '] ' . $msg . "\n\n";
 	}
 }
