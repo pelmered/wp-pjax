@@ -87,8 +87,9 @@ if ( ! function_exists( 'wp_pjax_check_request' ) ) {
 		}
 		if ( defined( $define_key ) && ! constant( $define_key ) ) {
 			return false;
-		} elseif ( ( array_key_exists( 'HTTP_' . $check, $_SERVER ) && $_SERVER[ 'HTTP_' . $check ] )
-				|| ( array_key_exists( $check, $_SERVER ) && $_SERVER[ $check ] )
+		} elseif (
+			( isset( $_SERVER[ 'HTTP_' . $check ] ) && (bool) $_SERVER[ 'HTTP_' . $check ] ) // Input var okay.
+			|| ( isset( $_SERVER[ $check ] ) && (bool) $_SERVER[ $check ] ) // Input var okay.
 		) {
 			define( $define_key, true );
 
