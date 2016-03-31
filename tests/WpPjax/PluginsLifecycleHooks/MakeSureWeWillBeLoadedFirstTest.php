@@ -15,8 +15,10 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 	 */
 	protected $plugin;
 
-	function setUp() {
-		parent::setUp();
+	/**
+	 * @before
+	 */
+	function setup_plugin() {
 		$this->plugin = PluginsLifecycleHooks::init( realpath( ABSPATH . 'wp-content/plugins/wp-pjax/wp-pjax.php' ) );
 	}
 
