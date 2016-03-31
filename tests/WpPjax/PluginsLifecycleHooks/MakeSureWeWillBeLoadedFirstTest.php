@@ -23,7 +23,7 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 	function test_do_nothing_when_no_plugin_will_beactive() {
 		update_option( 'active_plugins', array() );
 
-		$this->plugin->makeSureWeWillBeLoadedFirst();
+		$this->plugin->make_sure_we_will_be_loaded_first();
 
 		$this->assertEquals( array(), get_option( 'active_plugins' ) );
 	}
@@ -32,7 +32,7 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 		$activePlugins = array( 'seo/seo.php', 'wordfence/wordfence.php', 'wp-pjax.php' );
 		update_option( 'active_plugins', $activePlugins );
 
-		$this->plugin->makeSureWeWillBeLoadedFirst();
+		$this->plugin->make_sure_we_will_be_loaded_first();
 
 		$this->assertEquals( $activePlugins, get_option( 'active_plugins' ) );
 	}
@@ -41,7 +41,7 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 		$active_plugins = array( 'wp-pjax/wp-pjax.php' );
 		update_option( 'active_plugins', $active_plugins );
 
-		$this->plugin->makeSureWeWillBeLoadedFirst();
+		$this->plugin->make_sure_we_will_be_loaded_first();
 
 		$this->assertEquals( $active_plugins, get_option( 'active_plugins' ) );
 	}
@@ -50,7 +50,7 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 		$active_plugins = array( 'wp-pjax/wp-pjax.php', 'hello.php', 'zzz.php' );
 		update_option( 'active_plugins', $active_plugins );
 
-		$this->plugin->makeSureWeWillBeLoadedFirst();
+		$this->plugin->make_sure_we_will_be_loaded_first();
 
 		$this->assertEquals( $active_plugins, get_option( 'active_plugins' ) );
 	}
@@ -59,7 +59,7 @@ class MakeSureWeWillBeLoadedFirstTest extends WP_UnitTestCase {
 		$expected = array( 'seo/seo.php', 'wordfence/wordfence.php', 'wp-pjax/wp-pjax.php' );
 		update_option( 'active_plugins', $expected );
 
-		$this->plugin->makeSureWeWillBeLoadedFirst();
+		$this->plugin->make_sure_we_will_be_loaded_first();
 
 		$expected = array( 'wp-pjax/wp-pjax.php', 'seo/seo.php', 'wordfence/wordfence.php' );
 		$actual   = get_option( 'active_plugins' );

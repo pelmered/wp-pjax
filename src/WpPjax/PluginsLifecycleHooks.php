@@ -28,12 +28,12 @@ class PluginsLifecycleHooks {
 	 */
 	public static function init( $pluginFile ) {
 		$plugin = new self( $pluginFile );
-		add_action( 'activated_plugin', array( $plugin, 'makeSureWeWillBeLoadedFirst' ) );
+		add_action( 'activated_plugin', array( $plugin, 'make_sure_we_will_be_loaded_first' ) );
 
 		return $plugin;
 	}
 
-	public function makeSureWeWillBeLoadedFirst() {
+	public function make_sure_we_will_be_loaded_first() {
 		$basename = plugin_basename( $this->pluginFile );
 		$plugins  = get_option( 'active_plugins' );
 		$position = array_search( $basename, $plugins );
