@@ -91,9 +91,10 @@ class WP_PJAX_Config {
 		$wp_pjax_options = $this->get();
 
 		if ( isset( $_POST[ WP_PJAX_CONFIG_PREFIX . 'clear-cache' ] ) ) {
+			/** @var WP_PJAX_PageCache $page_cache */
 			$page_cache = wp_pjax_get_instance( 'PageCache' );
 			$page_cache->init( $this->config );
-			$page_cache->clearCache();
+			$page_cache->clear_cache();
 
 			echo '<div id="setting-error-settings_updated" class="updated settings-error">',
 			'<p><strong>Cache cleared!</strong></p></div>';

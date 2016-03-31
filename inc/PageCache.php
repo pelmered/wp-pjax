@@ -106,7 +106,7 @@ class WP_PJAX_PageCache {
 		);
 	}
 
-	public function clearCache() {
+	public function clear_cache() {
 		global $wpdb;
 
 		$wpdb->query(
