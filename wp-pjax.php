@@ -63,8 +63,9 @@ if ( ! function_exists( 'is_pjax_request' ) ) {
 			return true;
 		} elseif ( defined( 'IS_PJAX' ) && ! IS_PJAX ) {
 			return false;
-		} elseif ( ( array_key_exists( 'HTTP_X_PJAX', $_SERVER ) && $_SERVER['HTTP_X_PJAX'] )
-				|| ( array_key_exists( 'X_PJAX', $_SERVER ) && $_SERVER['X_PJAX'] )
+		} elseif (
+			( isset( $_SERVER['HTTP_X_PJAX'] ) && (bool) $_SERVER['HTTP_X_PJAX'] ) // Input var okay.
+			|| ( isset( $_SERVER['X_PJAX'] ) && (bool) $_SERVER['X_PJAX'] ) // Input var okay.
 		) {
 			define( 'IS_PJAX', true );
 
