@@ -14,7 +14,7 @@ class WP_PAJX_Util {
 	 *
 	 * @return array
 	 */
-	public function parse_sitemap( $url ) {
+	public static function parse_sitemap( $url ) {
 		$urls     = array();
 		$response = wp_remote_request( $url );
 
