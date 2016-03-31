@@ -31,6 +31,8 @@ require $_tests_dir . '/includes/bootstrap.php';
 global $wp_plugin_paths;
 $installed_plugin = dirname( __DIR__ ) . '/vendor/wordpress/wordpress/wp-content/plugins/wp-pjax';
 if ( ! is_link( $installed_plugin ) ) {
+	// @codingStandardsIgnoreStart
 	symlink( dirname( __DIR__ ), $installed_plugin );
+	// @codingStandardsIgnoreEnd
 }
 $wp_plugin_paths[ $installed_plugin ] = realpath( $installed_plugin );
