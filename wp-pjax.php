@@ -146,20 +146,21 @@ if ( ! function_exists( 'wp_pjax_header' ) ) {
 	add_action( 'wp_pjax_header', 'wp_pjax_header', 10, 3 );
 
 	/**
-	 * @param $wp
-	 * @param WP_PJAX_PageCache $pageCache
-	 * @param $cacheHit
+	 * Prints the <title> tag based on what is being viewed.
+	 *
+	 * @param WP                $wp         Current WordPress environment instance.
+	 * @param WP_PJAX_PageCache $page_cache Instance of PageCache.
+	 * @param string            $status     Status of cache MISS or HIT.
 	 */
-	function wp_pjax_header( $wp, $pageCache, $cacheHit ) {
-		if ( $pageCache->config[ WP_PJAX_CONFIG_PREFIX . 'show-extended-notice' ]
+	function wp_pjax_header( WP $wp, WP_PJAX_PageCache $page_cache, $status ) {
+		if ( $page_cache->config[ WP_PJAX_CONFIG_PREFIX . 'show-extended-notice' ]
 		     && current_user_can( 'edit_plugins' )
-		     || $pageCache->config['debug_mode']
+		     || $page_cache->config['debug_mode']
 		) {
-			header( 'PJAX-loaded-resource: ' . $pageCache->key );
+			header( 'PJAX-loaded-resource: ' . $page_cache->key );
 		}
 
-		// Print the <title> tag based on what is being viewed.
-		echo '<title>', apply_filters( 'wp_pjax_title', '' ), '</title>';
+		echo '<title>', esc_html( apply_filters( 'wp_pjax_title', '' ) ), '</title>';
 	}
 }
 
