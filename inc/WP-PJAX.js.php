@@ -2,21 +2,22 @@
 
 /** @var WP_PJAX_WP_PJAX $this */
 
-if (empty($this->config[WP_PJAX_CONFIG_PREFIX.'menu-selector'])
-    || empty($this->config[WP_PJAX_CONFIG_PREFIX.'content-selector'])
+if ( empty( $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-selector' ] )
+	|| empty( $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-selector' ] )
 ) {
-    trigger_error(
-        'ERROR: WP-PJAX Not set up correctly. Not loading JS. ' .
-        __FILE__ . ' (' . __LINE__ . ')',
-        E_USER_NOTICE
-    );
-    return '';
+	trigger_error(
+		'ERROR: WP-PJAX Not set up correctly. Not loading JS. ' .
+		__FILE__ . ' (' . __LINE__ . ')',
+		E_USER_NOTICE
+	);
+
+	return '';
 }
 
-if (!empty($this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'])) {
-    $active_classes = explode(' ', $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']);
+if ( ! empty( $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-active-class' ] ) ) {
+	$active_classes = explode( ' ', $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-active-class' ] );
 
-    $active_classes = '.' . implode(', .', $active_classes);
+	$active_classes = '.' . implode( ', .', $active_classes );
 }
 
 ?>
@@ -25,137 +26,138 @@ if (!empty($this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class'])) {
 
 jQuery.cookie=function(a,b,c){if(arguments.length>1&&String(b)!=="[object Object]"){c=jQuery.extend({},c);if(b===null||b===undefined)c.expires=-1;if(typeof c.expires=="number"){var d=c.expires,e=c.expires=new Date;e.setDate(e.getDate()+d)}b=String(b);return document.cookie=[encodeURIComponent(a),"=",c.raw?b:encodeURIComponent(b),c.expires?"; expires="+c.expires.toUTCString():"",c.path?"; path="+c.path:"",c.domain?"; domain="+c.domain:"",c.secure?"; secure":""].join("")}c=b||{};var f,g=c.raw?function(a){return a}:decodeURIComponent;return(f=(new RegExp("(?:^|; )"+encodeURIComponent(a)+"=([^;]*)")).exec(document.cookie))?g(f[1]):null}
 
-var time;
+	var time;
 
-(function ($) {
-    $(document).pjax(
-        '<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-selector']; ?>',
-        '<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>'
-    );
+	(function ($) {
+	$(document).pjax(
+		'<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-selector' ]; ?>',
+		'<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-selector' ]; ?>'
+		);
 
-    <?php if (!empty($this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout'])) : ?>
-    $.pjax.defaults.timeout = <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout']; ?>;
-    <?php elseif ($this->config[WP_PJAX_CONFIG_PREFIX.'load-timeout'] == '0') : ?>
-    $.pjax.defaults.timeout = false;
-    <?php endif; ?>
+	<?php if (! empty( $this->config[ WP_PJAX_CONFIG_PREFIX . 'load-timeout' ] )) : ?>
+	$.pjax.defaults.timeout = <?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'load-timeout' ]; ?>;
+	<?php elseif ($this->config[ WP_PJAX_CONFIG_PREFIX . 'load-timeout' ] == '0') : ?>
+	$.pjax.defaults.timeout = false;
+	<?php endif; ?>
 
-    $(document).on('pjax:timeout', function (event) {
-        event.preventDefault()
-    });
+	$(document).on('pjax:timeout', function (event) {
+	event.preventDefault()
+	});
 
-    $(document).on('pjax:beforeSend', function (event, xhr, settings) {
-        //Remove old link active classes
-        $('<?php echo $active_classes; ?>')
-            .removeClass('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
-    });
+	$(document).on('pjax:beforeSend', function (event, xhr, settings) {
+	//Remove old link active classes
+	$('<?php echo $active_classes; ?>')
+	.removeClass('<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-active-class' ]; ?>');
+	});
 
-    $(document).on('pjax:start', function (event, xhr, settings) {
-        Array.prototype
-            .map
-            .call(document.querySelector('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
-                      .querySelectorAll("iframe"), function (iframe) {
-                      iframe.src = "about:blank";
-                  });
-        <?php
-        if ($this->config[WP_PJAX_CONFIG_PREFIX.'pre-handler']) {
-            print $this->config[WP_PJAX_CONFIG_PREFIX.'pre-handler'];
-        }
-        ?>
+	$(document).on('pjax:start', function (event, xhr, settings) {
+	Array.prototype
+	.map
+	.call(document.querySelector('<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-selector' ]; ?>')
+	.querySelectorAll("iframe"), function (iframe) {
+	iframe.src = "about:blank";
+	});
+	<?php
+	if ( $this->config[ WP_PJAX_CONFIG_PREFIX . 'pre-handler' ] ) {
+		print $this->config[ WP_PJAX_CONFIG_PREFIX . 'pre-handler' ];
+	}
+	?>
 
 
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
-        var d = new Date();
-        time = d.getTime();
-        <?php endif; ?>
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'show-extended-notice' ]) : ?>
+	var d = new Date();
+	time = d.getTime();
+	<?php endif; ?>
 
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'content-fade' ]) : ?>
 
-        $('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
-            .animate({opacity: 0.1}, <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-out']; ?>);
+	$('<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-selector' ]; ?>')
+	.animate({opacity: 0.1}, <?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-fade-timeout-out' ]; ?>);
 
-        <?php endif; ?>
-    });
+	<?php endif; ?>
+	});
 
-    $(document).on('pjax:end', function (event, request, settings) {
-        <?php
-        if ($this->config[WP_PJAX_CONFIG_PREFIX.'post-handler']) {
-            print $this->config[WP_PJAX_CONFIG_PREFIX.'post-handler'];
-        }
-        ?>
+	$(document).on('pjax:end', function (event, request, settings) {
+	<?php
+	if ( $this->config[ WP_PJAX_CONFIG_PREFIX . 'post-handler' ] ) {
+		print $this->config[ WP_PJAX_CONFIG_PREFIX . 'post-handler' ];
+	}
+	?>
 
-        //Hack to get a location object from url string
-        url = document.createElement('a');
-        url.href = settings.url;
+	//Hack to get a location object from url string
+	url = document.createElement('a');
+	url.href = settings.url;
 
-        //add link active classes
-        $("a[href$='" + url.pathname + "']")
-            .parent()
-            .addClass('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'menu-active-class']; ?>');
+	//add link active classes
+	$("a[href$='" + url.pathname + "']")
+	.parent()
+	.addClass('<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'menu-active-class' ]; ?>');
 
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'content-fade']) : ?>
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'content-fade' ]) : ?>
 
-        $('<?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-selector']; ?>')
-            .animate({opacity: 1}, <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'content-fade-timeout-in']; ?>);
+	$('<?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-selector' ]; ?>')
+	.animate({opacity: 1}, <?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'content-fade-timeout-in' ]; ?>);
 
-        <?php endif; ?>
+	<?php endif; ?>
 
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'show-notice' ] == 1) : ?>
 
-        var noticeText;
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice']) : ?>
-        var cacheHit = request.getResponseHeader('PJAX-Page-Cache');
-        var XCacheHit = request.getResponseHeader('X-Cache-Hit');
-        var resource = request.getResponseHeader('PJAX-loaded-resource');
+	var noticeText;
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'show-extended-notice' ]) : ?>
+	var cacheHit = request.getResponseHeader('PJAX-Page-Cache');
+	var XCacheHit = request.getResponseHeader('X-Cache-Hit');
+	var resource = request.getResponseHeader('PJAX-loaded-resource');
 
-        var d = new Date();
-        time = d.getTime() - time;
+	var d = new Date();
+	time = d.getTime() - time;
 
-        noticeText = resource + '<br /> Loaded with PJAX! <br /> Load time: '
-                     + time + 'ms (total front end) <br /> PJAX page cache: ' + cacheHit
-                     + '<br /> Varnish cache: ' + XCacheHit;
+	noticeText = resource + '<br /> Loaded with PJAX! <br /> Load time: '
+	+ time + 'ms (total front end) <br /> PJAX page cache: ' + cacheHit
+	+ '<br /> Varnish cache: ' + XCacheHit;
 
-        <?php else : ?>
+	<?php else : ?>
 
-        noticeText = 'Loaded with PJAX!';
+	noticeText = 'Loaded with PJAX!';
 
-        <?php endif; ?>
+	<?php endif; ?>
 
-        $.noticeAdd({
-            text: noticeText,
-            <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'notice-sticky']) : ?>
-            stay: true
-            <?php else : ?>
-            stayTime: <?php echo $this->config[WP_PJAX_CONFIG_PREFIX.'notice-timeout']; ?>
-            <?php endif; ?>
-        });
+	$.noticeAdd({
+	text: noticeText,
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'notice-sticky' ]) : ?>
+	stay: true
+	<?php else : ?>
+	stayTime: <?php echo $this->config[ WP_PJAX_CONFIG_PREFIX . 'notice-timeout' ]; ?>
+	<?php endif; ?>
+	});
 
-        <?php endif; ?>
-    });
+	<?php endif; ?>
+	});
 
-    $(document).ready(function () {
-        <?php if ($this->config[WP_PJAX_CONFIG_PREFIX.'show-notice'] == 1) : ?>
+	$(document).ready(function () {
+	<?php if ($this->config[ WP_PJAX_CONFIG_PREFIX . 'show-notice' ] == 1) : ?>
 
-        if (!$.support.pjax) {
-            $('#wp-pjax-toggle-container')
-                .html(
-                '<p style="color: red">PJAX is not supported in this browser. Se '
-                + '<a href="http://caniuse.com/#search=pushstate">compatibility list</a></p>'
-            );
-        }
+	if (!$.support.pjax) {
+	$('#wp-pjax-toggle-container')
+	.html(
+	'<p style="color: red">PJAX is not supported in this browser. Se '
+	+ '<a href="http://caniuse.com/#search=pushstate">compatibility list</a></p>'
+	);
+	}
 
-        $('.notice-item').on('click', function () {
-            jQuery.noticeRemove($(this), 400);
-        });
+	$('.notice-item').on('click', function () {
+	jQuery.noticeRemove($(this), 400);
+	});
 
-        $('#wp-pjax-toggle').change(function () {
-            if ($(this).prop('checked')) {
-                $('#wp-pjax-toggle-status').html('Enabled').css('color', 'green');
-            } else {
-                $(document).pjax.disable();
-                $('#wp-pjax-toggle-status').html('Disabled').css('color', 'red');
-            }
-        });
-        <?php endif; ?>
-    });
-})(jQuery);
+	$('#wp-pjax-toggle').change(function () {
+	if ($(this).prop('checked')) {
+	$('#wp-pjax-toggle-status').html('Enabled').css('color', 'green');
+	} else {
+	$(document).pjax.disable();
+	$('#wp-pjax-toggle-status').html('Disabled').css('color', 'red');
+	}
+	});
+	<?php endif; ?>
+	});
+	})
+	(jQuery);
 </script>

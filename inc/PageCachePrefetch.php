@@ -5,121 +5,118 @@
  *
  * @author Peter Elmered
  */
-class WP_PJAX_PageCachePrefetch
-{
+class WP_PJAX_PageCachePrefetch {
 
-    private $config;
+	private $config;
 
-    public function init($config)
-    {
-        $this->config = $config;
+	public function init( $config ) {
+		$this->config = $config;
 
-        //Add cron schedule for prefetch
-        add_filter('cron_schedules', array($this, 'addPrefetchCronSchedules'));
+		//Add cron schedule for prefetch
+		add_filter( 'cron_schedules', array( $this, 'addPrefetchCronSchedules' ) );
 
-        add_action('wp-pjax-pg-prefetch', array(&$this, 'prefetch'));
+		add_action( 'wp-pjax-pg-prefetch', array( &$this, 'prefetch' ) );
 
-        if (!wp_next_scheduled('wp-pjax-pg-prefetch')) {
-            wp_schedule_event(current_time('timestamp'), 'wp_pjax_pg_prefetch', 'wp-pjax-pg-prefetch');
-        }
-    }
+		if ( ! wp_next_scheduled( 'wp-pjax-pg-prefetch' ) ) {
+			wp_schedule_event( current_time( 'timestamp' ), 'wp_pjax_pg_prefetch', 'wp-pjax-pg-prefetch' );
+		}
+	}
 
-    public function addPrefetchCronSchedules($schedules)
-    {
-        // add prefetch interval schedule
-        $schedules['wp_pjax_pg_prefetch'] = array(
-            'interval' => 300,
-            'display' => __('WP-PJAX Prefetch Interval'),
-        );
-        // add url cache refresh interval schedule
-        $schedules['wp_pjax_pg_prefetch_urls'] = array(
-            'interval' => 300,
-            'display' => __('WP-PJAX URL cache refresh interval'),
-        );
-        return $schedules;
-    }
+	public function addPrefetchCronSchedules( $schedules ) {
+		// add prefetch interval schedule
+		$schedules['wp_pjax_pg_prefetch'] = array(
+			'interval' => 300,
+			'display'  => __( 'WP-PJAX Prefetch Interval' ),
+		);
+		// add url cache refresh interval schedule
+		$schedules['wp_pjax_pg_prefetch_urls'] = array(
+			'interval' => 300,
+			'display'  => __( 'WP-PJAX URL cache refresh interval' ),
+		);
 
-    public function prefetch($start = 0)
-    {
-        $log = wp_pjax_get_instance('Log');
-        $log->setFile('prefetch');
+		return $schedules;
+	}
 
-        $start_time = microtime(true);
+	public function prefetch( $start = 0 ) {
+		$log = wp_pjax_get_instance( 'Log' );
+		$log->setFile( 'prefetch' );
 
-        set_time_limit(0);
-        ini_set('max_execution_time', 0);
+		$start_time = microtime( true );
 
-        $max_exec_time = ini_get('max_execution_time');
+		set_time_limit( 0 );
+		ini_set( 'max_execution_time', 0 );
 
-        echo 'Max exec time: ' . $max_exec_time;
+		$max_exec_time = ini_get( 'max_execution_time' );
 
-        $sitemap_url = $this->config[WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url'];
+		echo 'Max exec time: ' . $max_exec_time;
 
-        $urls = WP_PAJX_Util::parse_sitemap($sitemap_url);
+		$sitemap_url = $this->config[ WP_PJAX_CONFIG_PREFIX . 'page-cache-prefetch-sitemap-url' ];
 
-        set_transient('WP_PJAX_PREFETCH_URLS_TANSIENT', $urls, 86400 + 3600);
+		$urls = WP_PAJX_Util::parse_sitemap( $sitemap_url );
 
-        $msg = 'Page index refreshed. ' . count($urls) . ' URLs added.';
+		set_transient( 'WP_PJAX_PREFETCH_URLS_TANSIENT', $urls, 86400 + 3600 );
 
-        $log->write($msg);
-        echo $msg;
+		$msg = 'Page index refreshed. ' . count( $urls ) . ' URLs added.';
 
-        print_r($urls);
+		$log->write( $msg );
+		echo $msg;
 
-        get_transient('WP_PJAX_LAST_PREFETCH');
+		print_r( $urls );
 
-        $queue = array_slice($urls, $start);
+		get_transient( 'WP_PJAX_LAST_PREFETCH' );
 
-        echo 'Queue: ';
-        print_r($queue);
+		$queue = array_slice( $urls, $start );
 
-        $timeout = 20;
+		echo 'Queue: ';
+		print_r( $queue );
 
-        $args = array(
-            'headers' => array(
-                'X_PJAX' => 'true',
-                'X_PJAX_Container' => '#container',
-                'X_Requested_With' => 'XMLHttpRequest',
-                'HTTP_X_WP_PJAX_PREFETCH' => 'true',
-            ),
-            'timeout' => $timeout,
-        );
+		$timeout = 20;
 
-        $i = 0;
-        $msg = '';
-        $pages_fetched = 0;
+		$args = array(
+			'headers' => array(
+				'X_PJAX'                  => 'true',
+				'X_PJAX_Container'        => '#container',
+				'X_Requested_With'        => 'XMLHttpRequest',
+				'HTTP_X_WP_PJAX_PREFETCH' => 'true',
+			),
+			'timeout' => $timeout,
+		);
 
-        foreach ($queue as $url) {
-            ++$i;
+		$i             = 0;
+		$msg           = '';
+		$pages_fetched = 0;
 
-            $time_elapsed = microtime(true) - $start_time;
+		foreach ( $queue as $url ) {
+			++ $i;
 
-            if ($time_elapsed > ($max_exec_time - ($timeout + 1)) && $max_exec_time != 0) {
-                wp_schedule_single_event(current_time('timestamp'), 'wp-pjax-pg-prefetch', array($start + $i));
+			$time_elapsed = microtime( true ) - $start_time;
 
-                $msg .= 'execution timeout';
+			if ( $time_elapsed > ( $max_exec_time - ( $timeout + 1 ) ) && 0 != $max_exec_time ) {
+				wp_schedule_single_event( current_time( 'timestamp' ), 'wp-pjax-pg-prefetch', array( $start + $i ) );
 
-                $log->write($msg);
-                echo $msg;
+				$msg .= 'execution timeout';
 
-                continue;
-            }
+				$log->write( $msg );
+				echo $msg;
 
-            $r = wp_remote_request($url, $args);
+				continue;
+			}
 
-            if (is_array($r)) {
-                $pages_fetched++;
-            } else {
-                $pages_fetched++;
-            }
-        }
+			$r = wp_remote_request( $url, $args );
 
-        $msg .= 'Pages prefetched: ' . $pages_fetched . ' Running time: ' . (microtime(true) - $start_time);
+			if ( is_array( $r ) ) {
+				$pages_fetched ++;
+			} else {
+				$pages_fetched ++;
+			}
+		}
 
-        $log->write($msg);
+		$msg .= 'Pages prefetched: ' . $pages_fetched . ' Running time: ' . ( microtime( true ) - $start_time );
 
-        echo $msg;
+		$log->write( $msg );
 
-        die('die');
-    }
+		echo $msg;
+
+		die( 'die' );
+	}
 }
