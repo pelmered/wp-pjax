@@ -13,7 +13,7 @@ class WP_PJAX_PageCachePrefetch {
 		$this->config = $config;
 
 		//Add cron schedule for prefetch
-		add_filter( 'cron_schedules', array( $this, 'addPrefetchCronSchedules' ) );
+		add_filter( 'cron_schedules', array( $this, 'add_prefetch_cron_schedules' ) );
 
 		add_action( 'wp-pjax-pg-prefetch', array( &$this, 'prefetch' ) );
 
@@ -22,7 +22,7 @@ class WP_PJAX_PageCachePrefetch {
 		}
 	}
 
-	public function addPrefetchCronSchedules( $schedules ) {
+	public function add_prefetch_cron_schedules( $schedules ) {
 		// add prefetch interval schedule
 		$schedules['wp_pjax_pg_prefetch'] = array(
 			'interval' => 300,
