@@ -29,7 +29,9 @@
  * @package wp-pjax
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+if ( ! class_exists( '\Composer\Autoload\ClassLoader' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
 
 define( 'WP_PJAX_PLUGIN_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
 
