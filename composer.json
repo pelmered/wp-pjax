@@ -1,5 +1,5 @@
 {
-    "name": "eimanavicius/wp-pjax",
+    "name": "pelmered/wp-pjax",
     "description": "Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content",
     "homepage": "https://github.com/pelmered/wp-pjax",
     "type": "wordpress-plugin",
