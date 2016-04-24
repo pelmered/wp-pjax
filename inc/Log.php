@@ -1,46 +1,32 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Log
+ * Class WP_PJAX_Log
  *
  * @author Peter Elmered
  */
-class WP_PJAX_Log
-{
-    
-    private $fh  = NULL; //Log file handle
-    
-    public function __construct()
-    {
-        
-    }
-    
-    public function setFile($filename)
-    {
-        $this->fh = fopen(WP_PJAX_PLUGIN_PATH.'logs'.DIRECTORY_SEPARATOR.$filename, 'a');
-    }
-    
-    
-    public function write( $msg )
-    {
-        if( !$this->fh )
-        {
-            $this->setFile('error');
-        }
-        
-        return fwrite($this->fh, $this->_format_log($msg));
-    }
-    
-    private function  _format_log($msg)
-    {
-        return  '['.date('Y-m-d h:i:s').'] '. $msg . "\n\n";
-    }
-    
-}
+class WP_PJAX_Log {
 
-?>
+	/**
+	 * Log file handle
+	 *
+	 * @var resource|null
+	 */
+	private $fh = null;
+
+	public function write( $msg ) {
+		if ( ! $this->fh ) {
+			$this->set_file( 'error' );
+		}
+
+		return fwrite( $this->fh, $this->format_log( $msg ) );
+	}
+
+	public function set_file( $filename ) {
+		$this->fh = fopen( WP_PJAX_PLUGIN_PATH . 'logs' . DIRECTORY_SEPARATOR . $filename, 'a' );
+	}
+
+	private function format_log( $msg ) {
+		return '[' . date( 'Y-m-d h:i:s' ) . '] ' . $msg . "\n\n";
+	}
+}

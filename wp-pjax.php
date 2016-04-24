@@ -1,270 +1,221 @@
 <?php
 /**
-Plugin Name: WP-PJAX
-Plugin URI: http://wordpress.org/extend/plugins/wp-pjax/
-Description: Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content
-Version: 0.0.4.1.1
-Author: Peter Elmered
-Author URI: http://elmered.com
-Text Domain: pe_wp_pjax
-License: http://www.gnu.org/licenses/gpl.html GNU General Public License
-*/
-/*
-  Copyright 2013 Peter Elmered (email: peter@elmered.com)
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License, version 2, as 
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-//define('WP_DEBUG', true);
-//error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED );
-//ini_set("display_errors", 1);
-
-define('WP_PJAX_PLUGIN_URL', plugins_url().'/wp-pjax');
-define('WP_PJAX_PLUGIN_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
-
-require_once(WP_PJAX_PLUGIN_PATH.'inc/define.php');
-require_once(WP_PJAX_PLUGIN_PATH.'views/settingsmenu.php');
-
-/**
- * Make sure this plugin is loaded first!
+ * Plugin Name: WP-PJAX
+ * Plugin URI:  http://wordpress.org/extend/plugins/wp-pjax/
+ * Description: Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content
+ * Version:     0.0.4.1.1
+ * Author:      Peter Elmered
+ * Author URI:  http://elmered.com
+ * License:     GPL2+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: pe_wp_pjax
+ *
+ * Copyright (C) 2013  Peter Elmered
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * @package wp-pjax
  */
-add_action("activated_plugin", "load_this_plugin_first");
-function load_this_plugin_first() {
-	$active_plugins = get_option('active_plugins');
-	$this_plugin_key = array_search(WP_PJAX_PLUGIN_PATH, $active_plugins);
-	if ($this_plugin_key) { // if it's 0 it's the first plugin already, no need to continue
-		array_splice($active_plugins, $this_plugin_key, 1);
-		array_unshift($active_plugins, WP_PJAX_PLUGIN_PATH);
-		update_option('active_plugins', $active_plugins);
-	}
+
+if ( ! class_exists( '\Composer\Autoload\ClassLoader' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
 }
 
+define( 'WP_PJAX_PLUGIN_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
+
+if ( is_admin() ) {
+	$wp_pjax_settings_page = new WPPjaxSettingsPage();
+}
+
+\WpPjax\PluginsLifecycleHooks::init( __FILE__ );
 
 /**
  * Returns instance of singleton class
  *
- * @param string $class
+ * @param string $class Short class name.
+ *
  * @return object
  */
-function wp_pjax_get_instance($class) {
-    static $instances = array();
-    
-    if (!isset($instances[$class])) {
-        $filepath =  WP_PJAX_PLUGIN_INCLUDE_PATH.str_replace('_', '-', $class).'.php';
-        if(file_exists($filepath))
-        {
-            require_once($filepath);
-        }
-        $classname = 'WP_PJAX_'.$class;
-        
-        $instances[$class] = new $classname();
-    }
+function wp_pjax_get_instance( $class ) {
+	static $instances = array();
 
-    return $instances[$class];   // Don't return reference
+	if ( ! isset( $instances[ $class ] ) ) {
+		$classname = 'WP_PJAX_' . $class;
+
+		$instances[ $class ] = new $classname();
+	}
+
+	return $instances[ $class ]; // Don't return reference!
 }
-
-
-/*
-function wp_pjax_init() 
-{
-	
-  $WP_PJAX = new WP_PJAX();
-    
-}
-add_action( 'plugins_loaded', 'wp_pjax_init' );
-*/
-
 
 global $wp_pjax_options;
 
-
-if(!function_exists( 'is_pjax_request' ))
-{
-        function is_pjax_request()
-    {
-        if(defined('IS_PJAX') && IS_PJAX)
-        {
-            return TRUE;
-        }
-        else if(defined('IS_PJAX') && !IS_PJAX)
-        {
-            return FALSE;
-        }
-        else if ( (array_key_exists('HTTP_X_PJAX', $_SERVER) && $_SERVER['HTTP_X_PJAX']) || (array_key_exists('X_PJAX', $_SERVER) && $_SERVER['X_PJAX']) )
-        {
-            define('IS_PJAX', TRUE);
-            return TRUE;
-        }
-        else
-        {
-            define('IS_PJAX', FALSE);
-            return FALSE;
-        }
-    }
-}
-
-
-
-if(!function_exists( 'wp_pjax_check_request' ))
-{
-    function wp_pjax_check_request( $check )
-    {
-        $define_key = 'IS_'.$check;
-            
-        if(defined($define_key) && constant($define_key))
-        {
-            return TRUE;
-        }
-        if(defined($define_key) && !constant($define_key))
-        {
-            return FALSE;
-        }
-        else if ( (array_key_exists('HTTP_'.$check, $_SERVER) && $_SERVER['HTTP_'.$check]) || (array_key_exists($check, $_SERVER) && $_SERVER[$check]) )
-        {
-            define($define_key, TRUE);
-            return TRUE;
-        }
-        else
-        {
-            define($define_key, FALSE);
-            return FALSE;
-        }
-    }
-}
-
-
-if(!function_exists( 'get_pjax_header' ))
-{
-    function get_pjax_header()
-    {  
-        if ( is_pjax_request() )
-        {
-            //Return TRUE to skip execution of wp_header
-            return TRUE;
-        }
-        else
-        {
-            //Return FALSE to execute wp_header
-            return FALSE;
-        }
-    }
-}
-if(!function_exists( 'get_pjax_footer' ))
-{
-    function get_pjax_footer()
-    {  
-        if ( is_pjax_request() )
-        {
-            do_action('get_pjax_footer');
-    
-            //Return TRUE to skip execution of wp_footer
-            return TRUE;
-        }
-        else
-        {
-            //Return FALSE to execute wp_footer
-            return FALSE;
-        }
-    }
-}
-if(!function_exists( 'get_pjax_sidebar' ))
-{
-    function get_pjax_sidebar()
-    {  
-        if ( is_pjax_request() )
-        {
-            do_action('wp_pjax_sidebar');
-            
-            //Return TRUE to skip execution of sidebar
-            return TRUE;
-        }
-        else
-        {
-            //Return FALSE to execute sidebar
-            return FALSE;
-        }
-    }
-}
-
-if(!function_exists( 'wp_pjax_header' ))
-{
-    add_action('wp_pjax_header', 'wp_pjax_header', 10, 3);
-    
-    function wp_pjax_header($wp, $pjax, $cacheHit)
-    {
-        if(  $pjax->_config[WP_PJAX_CONFIG_PREFIX.'show-extended-notice'] && current_user_can('edit_plugins') || $pjax->_config['debug_mode'] )
-        {
-            header('PJAX-loaded-resource: '.$pjax->page_cache['key']);
-        }
-        
-?>
-<title><?php
-	/*
-	 * Print the <title> tag based on what is being viewed.
+if ( ! function_exists( 'is_pjax_request' ) ) {
+	/**
+	 * Check is request from pjax
+	 *
+	 * @return bool
 	 */
-	//global $page, $paged;
+	function is_pjax_request() {
+		if ( defined( 'IS_PJAX' ) && IS_PJAX ) {
+			return true;
+		} elseif ( defined( 'IS_PJAX' ) && ! IS_PJAX ) {
+			return false;
+		} elseif (
+			( isset( $_SERVER['HTTP_X_PJAX'] ) && (bool) $_SERVER['HTTP_X_PJAX'] ) // Input var okay.
+			|| ( isset( $_SERVER['X_PJAX'] ) && (bool) $_SERVER['X_PJAX'] ) // Input var okay.
+		) {
+			define( 'IS_PJAX', true );
 
-       $title = apply_filters('wp_pjax_title', '');
-       
-       echo $title;
-?></title>
+			return true;
+		} else {
+			define( 'IS_PJAX', false );
 
-
-<?php
-    }
-    
+			return false;
+		}
+	}
 }
 
-add_filter('wp_pjax_title', 'wp_pjax_title');
+if ( ! function_exists( 'wp_pjax_check_request' ) ) {
+	/**
+	 * Checks header as flag value
+	 *
+	 * @param string $check Header name.
+	 *
+	 * @return bool
+	 */
+	function wp_pjax_check_request( $check ) {
+		$define_key = 'IS_' . $check;
 
-function wp_pjax_title($title) {
+		if ( defined( $define_key ) && constant( $define_key ) ) {
+			return true;
+		}
+		if ( defined( $define_key ) && ! constant( $define_key ) ) {
+			return false;
+		} elseif (
+			( isset( $_SERVER[ 'HTTP_' . $check ] ) && (bool) $_SERVER[ 'HTTP_' . $check ] ) // Input var okay.
+			|| ( isset( $_SERVER[ $check ] ) && (bool) $_SERVER[ $check ] ) // Input var okay.
+		) {
+			define( $define_key, true );
 
-    $title = '';
-    
-    $title = wp_title( '|', FALSE, 'right' );
+			return true;
+		} else {
+			define( $define_key, false );
 
-    // Add the blog name.
-    $title .= get_bloginfo( 'name' );
-
-    // Add the blog description for the home/front page.
-    $site_description = get_bloginfo( 'description', 'display' );
-    if ( $site_description && ( is_home() || is_front_page() ) )
-        $title .= " | $site_description";
-    
-    return $title;
+			return false;
+		}
+	}
 }
-    
 
+if ( ! function_exists( 'get_pjax_header' ) ) {
+	/**
+	 * Should wp_header execution be skipped
+	 *
+	 * @return bool
+	 */
+	function get_pjax_header() {
+		if ( is_pjax_request() ) {
+			// Return TRUE to skip execution of wp_header.
+			return true;
+		} else {
+			// Return FALSE to execute wp_header.
+			return false;
+		}
+	}
+}
 
+if ( ! function_exists( 'get_pjax_footer' ) ) {
+	/**
+	 * Should wp_footer execution be skipped
+	 *
+	 * @return bool
+	 */
+	function get_pjax_footer() {
+		if ( is_pjax_request() ) {
+			do_action( 'get_pjax_footer' );
 
-/* 
- * Instantiate the class
+			// Return TRUE to skip execution of wp_footer.
+			return true;
+		} else {
+			// Return FALSE to execute wp_footer.
+			return false;
+		}
+	}
+}
+
+if ( ! function_exists( 'get_pjax_sidebar' ) ) {
+	/**
+	 * Should sidebar execution be skipped
+	 *
+	 * @return bool
+	 */
+	function get_pjax_sidebar() {
+		if ( is_pjax_request() ) {
+			do_action( 'wp_pjax_sidebar' );
+
+			// Return TRUE to skip execution of sidebar.
+			return true;
+		} else {
+			// Return FALSE to execute sidebar.
+			return false;
+		}
+	}
+}
+
+if ( ! function_exists( 'wp_pjax_header' ) ) {
+	add_action( 'wp_pjax_header', 'wp_pjax_header', 10, 3 );
+
+	/**
+	 * Prints the <title> tag based on what is being viewed
+	 *
+	 * @param WP                $wp         Current WordPress environment instance.
+	 * @param WP_PJAX_PageCache $page_cache Instance of PageCache.
+	 * @param string            $status     Status of cache MISS or HIT.
+	 */
+	function wp_pjax_header( WP $wp, WP_PJAX_PageCache $page_cache, $status ) {
+		if ( $page_cache->config[ WP_PJAX_CONFIG_PREFIX . 'show-extended-notice' ]
+		     && current_user_can( 'edit_plugins' )
+		     || $page_cache->config['debug_mode']
+		) {
+			header( 'PJAX-loaded-resource: ' . $page_cache->key );
+		}
+
+		echo '<title>', esc_html( apply_filters( 'wp_pjax_title', '' ) ), '</title>';
+	}
+}
+
+add_filter( 'wp_pjax_title', 'wp_pjax_title' );
+/**
+ * Adds blog name and description to wp_title
+ *
+ * @return string
  */
+function wp_pjax_title() {
+	$title = wp_title( '|', false, 'right' );
 
+	// Add the blog name.
+	$title .= get_bloginfo( 'name' );
 
-$wp_pjax = wp_pjax_get_instance('WP_PJAX');
+	// Add the blog description for the home/front page.
+	$site_description = get_bloginfo( 'description', 'display' );
+	if ( $site_description && ( is_home() || is_front_page() ) ) {
+		$title .= " | $site_description";
+	}
 
+	return $title;
+}
+
+$wp_pjax = wp_pjax_get_instance( 'WP_PJAX' );
 $wp_pjax->run();
-
-
-/*
-if (class_exists('WP_PJAX')) {
-  $WP_PJAX = new WP_PJAX();
-}
-else
-{
-//    trigger_error('ERROR: WP-PJAX Class not found: '.__FILE__ . ' (' .__LINE__ . ')', E_USER_WARNING );
-}
-*/
-

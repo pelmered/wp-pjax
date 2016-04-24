@@ -1,3 +1,70 @@
-/nbproject/
-*.db
-*TAGS
+### test tools
+tests/wordpress/
+phpunit.xml
+
+### Vendor (e.g. Composer, NPM, Bower)
+vendor/*
+!vendor/.gitkeep
+composer.lock
+node_modules/
+bower_components/
+
+### IDE (NetBeans, JetBrains, Eclipse)
+nbproject/
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+.metadata
+local.properties
+.settings/
+.loadpath
+.project
+
+### OS related ignores (Windows, Linux, OSX)
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+# Folder config file
+Desktop.ini
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+# Windows shortcuts
+*.lnk
+
+*~
+# KDE directory preferences
+.directory
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+.DS_Store
+.AppleDouble
+.LSOverride
+# Icon must end with two \r
+Icon
+# Thumbnails
+._*
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Tags
+# Ignore tags created by etags, ctags, gtags (GNU global) and cscope
+TAGS
+!TAGS/
+tags
+!tags/
+gtags.files
+GTAGS
+GRTAGS
+GPATH
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out

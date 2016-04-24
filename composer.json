@@ -1,0 +1,68 @@
+{
+    "name": "pelmered/wp-pjax",
+    "description": "Makes Wordpress use the PJAX (PushState + AJAX) technique for loading content",
+    "homepage": "https://github.com/pelmered/wp-pjax",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Peter Elmered",
+            "email": "peter@elmered.com",
+            "homepage": "http://www.elmered.com"
+        },
+        {
+            "name": "Nerijus Eimanavičius",
+            "email": "nerijus@eimanavicius.lt",
+            "homepage": "http://nerijus.eimanavicius.lt"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        },
+        "classmap": [
+            "inc/",
+            "views/settingsmenu.php"
+        ],
+        "files": [
+            "inc/define.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "wordpress/phpunit",
+                "version": "master",
+                "source": {
+                    "type": "svn",
+                    "url": "https://develop.svn.wordpress.org/trunk/tests/phpunit/",
+                    "reference": "includes"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "wordpress/wordpress",
+                "version": "4.4.2",
+                "source": {
+                    "type": "svn",
+                    "url": "https://develop.svn.wordpress.org/tags/4.4.2/",
+                    "reference": "src"
+                }
+            }
+        }
+    ],
+    "require-dev": {
+        "wordpress/wordpress": "^4.4",
+        "phpunit/phpunit": "^4.8",
+        "wordpress/phpunit": "dev-master"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
